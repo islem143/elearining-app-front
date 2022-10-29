@@ -51,7 +51,7 @@ const asyncRoutes = [
       {
         path: "list",
         name: "module-list",
-        component: () => import("../components/modules/ModuleList.vue"),
+        component: () => import("../views/modules/ModuleList.vue"),
         meta: {
           roles: ["super-admin", "student", "teacher"],
         },
@@ -59,7 +59,15 @@ const asyncRoutes = [
       {
         path: "create",
         name: "module-create",
-        component: () => import("../components/modules/ModuleForm.vue"),
+        component: () => import("../views/modules/ModuleEdit.vue"),
+        meta: {
+          roles: ["super-admin", "teacher"],
+        },
+      },
+      {
+        path: "edit/:moduleId(\\d+)",
+        name: "module-edit",
+        component: () => import("../views/modules/ModuleEdit.vue"),
         meta: {
           roles: ["super-admin", "teacher"],
         },
