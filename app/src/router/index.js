@@ -80,8 +80,25 @@ const asyncRoutes = [
           roles: ["super-admin", "teacher"],
         },
       },
+      {
+        path: ":moduleId(\\d+)/course/create",
+        name: "course-create",
+        component: () => import("../views/courses/CourseEdit.vue"),
+        meta: {
+          roles: ["super-admin", "teacher"],
+        },
+      },
+      {
+        path: ":moduleId(\\d+)/course/:courseId(\\d+)/edit",
+        name: "course-edit",
+        component: () => import("../views/courses/CourseEdit.vue"),
+        meta: {
+          roles: ["super-admin", "teacher"],
+        },
+      },
     ],
   },
+
   { path: "/:pathMatch(.*)", redirect: "/404", hidden: true },
 ];
 

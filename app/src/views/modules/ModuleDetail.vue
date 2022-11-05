@@ -1,12 +1,18 @@
 <template>
-  <div class="grid card p-fluid">
-    <div class="col-3">
-      <ModuleInfoVue :info="info" />
+  <div class="card pt-0 px-0 p-fluid bg-white">
+    <div class="p-4 text-white border-round-top m-0 bg-blue-300">
+      <h3>Module: {{ info.title }}</h3>
     </div>
-    <div class="col-9">
+    <div class="p-5">
+      <div class="flex justify-content-between mb-5">
+        <h3>Courses</h3>
+        <router-link :to="{ name: 'course-create',params:{moduleId:id} }">
+          <Button style="width: 130px" icon="pi pi-plus" class="ml-5" label="Add Course" />
+        </router-link>
+      </div>
+
       <CouresListVue />
     </div>
-
   </div>
 </template>
 
@@ -23,6 +29,7 @@ export default {
   },
   data() {
     return {
+      id:null,
       info: {
         title: "",
         description: "",
@@ -32,8 +39,9 @@ export default {
   },
   created() {
     let id = this.$route.params.moduleId;
-
+this.id=id;
     axios.get("/api/module/" + id).then((res) => {
+
       this.info.title = res.data.title;
       this.info.description = res.data.descprtion;
       this.info.img_url = res.data.img_url;

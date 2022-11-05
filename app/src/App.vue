@@ -1,5 +1,6 @@
 <template>
   <div :class="containerClass" @click="onWrapperClick">
+    <Toast />
     <AppTopBar @menu-toggle="onMenuToggle" />
     <div class="layout-sidebar" @click="onSidebarClick">
       <AppMenu :model="menu" @menuitem-click="onMenuItemClick" />
@@ -167,4 +168,11 @@ export default {
 
 <style lang="scss">
 @import "./App.scss";
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap");
+body {
+  font-family: "Roboto", sans-serif;
+}
+:root {
+  --surface-card: surface-200;
+}
 </style>

@@ -36,15 +36,12 @@
             </div>
           </template>
           <template #list="slotProps">
-            <div class="col-12">
+            <div class="col-12 cursor-pointer" @click="goTo(slotProps.data)">
               <div
                 class="flex flex-column md:flex-row align-items-center p-3 w-full"
               >
                 <img
-                  :src="
-                    'http://localhost:8081/images/' +
-                    slotProps.data.img_url.split('/')[2]
-                  "
+                  :src="'http://localhost:8081/images/' + src(slotProps.data)"
                   :alt="slotProps.data.name"
                   class="my-4 md:my-0 w-9 md:w-10rem shadow-2 mr-5"
                 />
@@ -72,24 +69,24 @@
           </template>
 
           <template #grid="slotProps">
-            <div class="col-12 md:col-3">
+            <div
+              class="col-12 md:col-3 cursor-pointer"
+              @click="goTo(slotProps.data)"
+            >
               <div class="card m-3 border-1 surface-border">
                 <div
                   class="flex align-items-center justify-content-between"
                 ></div>
                 <div class="text-center">
                   <img
-                    :src="
-                      'http://localhost:8081/images/' +
-                      slotProps.data.img_url.split('/')[2]
-                    "
+                    :src="'http://localhost:8081/images/' + src(slotProps.data)"
                     :alt="slotProps.data.name"
                     class="w-9 shadow-2 my-3 mx-0"
                   />
                   <div class="text-2xl font-bold">
                     {{ slotProps.data.title }}
                   </div>
-                  <div class="mb-3">{{ slotProps.data.description }}</div>
+                  <div class="mb-3 mt-2">{{ slotProps.data.descprtion }}</div>
                 </div>
                 <div class="flex align-items-center justify-content-center">
                   <Button
@@ -137,6 +134,17 @@ export default {
   },
 
   methods: {
+    src(info) {
+      console.log(info);
+      return info.img_url.split("/")[2];
+    },
+    goTo(data) {
+      console.log(data);
+      this.$router.push({
+        name: "module-detail",
+        params: { moduleId: data.id },
+      });
+    },
     editModule(data) {
       this.$router.push({ name: "module-edit", params: { moduleId: data.id } });
     },
