@@ -1,21 +1,26 @@
 <template>
   <div>
-    
-    <Chip  label="Completed" class="py-1 px-3 cursor-pointer font-bold text-900 hover:surface-400 mr-2 mb-3 custom-chip" />
+    <Chip
+      label="Completed"
+      class="py-1 px-3 cursor-pointer font-bold text-900 hover:surface-400 mr-2 mb-3 custom-chip"
+    />
 
-    <CourseCardVue v-for="i in items" />
+    <CourseCardVue v-for="course in courses" :course="course" />
   </div>
 </template>
 
 <script>
 import CourseCardVue from "./CourseCard.vue";
+import axios from "../../http";
 export default {
   name: "CourseList",
-  data() {
-    return {
-      items: [1, 2, 3],
-    };
+  props: {
+    courses: {
+      type: Array,
+    },
   },
+ 
+  created() {},
   components: {
     CourseCardVue,
   },

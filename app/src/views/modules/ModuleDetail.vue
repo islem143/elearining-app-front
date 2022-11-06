@@ -6,12 +6,17 @@
     <div class="p-5">
       <div class="flex justify-content-between mb-5">
         <h3>Courses</h3>
-        <router-link :to="{ name: 'course-create',params:{moduleId:id} }">
-          <Button style="width: 130px" icon="pi pi-plus" class="ml-5" label="Add Course" />
+        <router-link :to="{ name: 'course-create', params: { moduleId: id } }">
+          <Button
+            style="width: 145px"
+            icon="pi pi-plus"
+            class="ml-5"
+            label="Add Course"
+          />
         </router-link>
       </div>
 
-      <CouresListVue />
+      <CouresListVue :courses="courses"  />
     </div>
   </div>
 </template>
@@ -29,22 +34,26 @@ export default {
   },
   data() {
     return {
-      id:null,
+      id: null,
       info: {
         title: "",
         description: "",
         img_url: "",
       },
+      courses: [],
     };
   },
   created() {
     let id = this.$route.params.moduleId;
-this.id=id;
+    this.id = id;
     axios.get("/api/module/" + id).then((res) => {
-
       this.info.title = res.data.title;
       this.info.description = res.data.descprtion;
       this.info.img_url = res.data.img_url;
+
+      axios.get("/api/module/" +id + "/course").then((res) => {
+        this.courses = res.data;
+      });
     });
   },
 };

@@ -1,10 +1,11 @@
 <template>
   <div
-    class="flex pa-7  justify-content-between cursor-pointer card p-fuild h-8rem transition-all transition-duration-200  hover:bg-gray-100 shadow-4 hover:shadow-6"
+    @click="courseDetail"
+    class="flex pa-7 justify-content-between cursor-pointer card p-fuild h-8rem transition-all transition-duration-200 hover:bg-gray-100 shadow-4 hover:shadow-6"
   >
     <div>
-      <a href="" class="text-xl font-bold text-900">Title</a>
-      <p class="mt-2">Description</p>
+      <a href="" class="text-xl font-bold text-900">{{ course.title }}</a>
+      <p class="mt-2">{{ course.description }}</p>
     </div>
     <div>
       <Button label="Start" icon="pi pi-arrow-right" iconPos="right" />
@@ -15,5 +16,21 @@
 <script>
 export default {
   name: "CourseCard",
+  props: {
+    course: {
+      type: Object,
+    },
+    moduleId: {
+      type: Number,
+    },
+  },
+  methods: {
+    courseDetail() {
+      this.$router.push({
+        name: "course-detail",
+        params: { moduleId: this.$route.params.moduleId, courseId: this.course.id },
+      });
+    },
+  },
 };
 </script>

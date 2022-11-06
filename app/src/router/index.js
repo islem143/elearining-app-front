@@ -57,7 +57,7 @@ const asyncRoutes = [
         },
       },
       {
-        path: "detail/:moduleId(\\d+)",
+        path: ":moduleId(\\d+)/detail",
         name: "module-detail",
         component: () => import("../views/modules/ModuleDetail.vue"),
         meta: {
@@ -73,7 +73,7 @@ const asyncRoutes = [
         },
       },
       {
-        path: "edit/:moduleId(\\d+)",
+        path: "moduleId(\\d+)/edit",
         name: "module-edit",
         component: () => import("../views/modules/ModuleEdit.vue"),
         meta: {
@@ -88,6 +88,7 @@ const asyncRoutes = [
           roles: ["super-admin", "teacher"],
         },
       },
+      
       {
         path: ":moduleId(\\d+)/course/:courseId(\\d+)/edit",
         name: "course-edit",
@@ -96,6 +97,15 @@ const asyncRoutes = [
           roles: ["super-admin", "teacher"],
         },
       },
+      {
+        path: ":moduleId(\\d+)/course/:courseId(\\d+)/detail",
+        name: "course-detail",
+        component: () => import("../views/courses/CourseDetail.vue"),
+        meta: {
+          roles: ["super-admin", "teacher", "student"],
+        },
+      },
+      
     ],
   },
 

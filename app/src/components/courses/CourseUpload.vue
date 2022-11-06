@@ -64,7 +64,6 @@
 </template>
 
 <script>
-import UploadService from "../../services/UploadService";
 export default {
   name: "CourseUpload",
   props: {
