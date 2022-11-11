@@ -1,6 +1,7 @@
 <template>
   <div class="card p-fluid">
     <h4>Add Course</h4>
+    <Button label="Add Quiz" class="w-1" />
     <div class="flex justify-content-center">
       <div class="w-6 mt-5">
         <div class="field">
@@ -20,12 +21,17 @@
           :media="media"
         />
       </div>
-      <ul>
+      <!-- <ul>
         <li v-for="media of mediaList">
           <a :href="'http://localhost:8081/'+media.url" >{{media.name}}</a>
         </li>
-      </ul>
-   
+      </ul> -->
+    </div>
+    <h4>Add Quiz</h4>
+    <div class="flex justify-content-center">
+      <div class="w-10 mt-5">
+        <QuizForm />
+      </div>
     </div>
   </div>
 </template>
@@ -36,11 +42,13 @@ import { required } from "@vuelidate/validators";
 import useVuelidate from "@vuelidate/core";
 import axios from "../../http";
 import UploadService from "../../services/UploadService";
+import QuizForm from "../quizes/QuizForm.vue";
 
 export default {
   name: "CourseForm",
   components: {
     UploadMedia,
+    QuizForm,
   },
   created() {
     let moduleId = parseInt(this.$route.params.moduleId);

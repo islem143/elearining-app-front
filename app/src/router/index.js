@@ -88,7 +88,7 @@ const asyncRoutes = [
           roles: ["super-admin", "teacher"],
         },
       },
-      
+
       {
         path: ":moduleId(\\d+)/course/:courseId(\\d+)/edit",
         name: "course-edit",
@@ -105,7 +105,29 @@ const asyncRoutes = [
           roles: ["super-admin", "teacher", "student"],
         },
       },
-      
+    ],
+  },
+  {
+    path: "/courses",
+    component: App,
+
+    children: [
+      {
+        path: ":courseId(\\d+)/quiz/create",
+        name: "quiz-create",
+        component: () => import("../views/quizes/QuizEdit.vue"),
+        meta: {
+          roles: ["super-admin", "teacher"],
+        },
+      },
+      {
+        path: ":courseId(\\d+)/quiz/:quizId(\\d+)/edit",
+        name: "quiz-edit",
+        component: () => import("../views/quizes/QuizEdit.vue"),
+        meta: {
+          roles: ["super-admin", "teacher"],
+        },
+      },
     ],
   },
 
