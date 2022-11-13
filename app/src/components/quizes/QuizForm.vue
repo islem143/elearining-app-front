@@ -141,6 +141,15 @@ export default {
   },
   methods: {
     addQuestions() {
+      if (!this.quizId) {
+        this.$toast.add({
+          severity: "warn",
+          summary: "Please create the quiz first.",
+
+          life: 3000,
+        });
+        return;
+      }
       this.questions.forEach((question) => {
         axios
           .post("/api/quiz/" + this.quizId + "/question", {

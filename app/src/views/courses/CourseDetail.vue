@@ -49,6 +49,7 @@ export default {
       axios.get("/api/media/" + courseId).then((res) => {
         this.attachments = res.data;
       });
+     
     });
   },
 };

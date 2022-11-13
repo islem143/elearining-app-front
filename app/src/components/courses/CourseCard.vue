@@ -1,6 +1,5 @@
 <template>
   <div
-    
     class="pa-7 cursor-pointer p-5 m-4 border-round transition-all transition-duration-200 hover:bg-gray-100 shadow-4 hover:shadow-6"
   >
     <div class="flex justify-content-between">
@@ -34,9 +33,16 @@
       >
     </p>
     <h5>Quiz:</h5>
-    <div>
+    <div class="w-5">
+    <div v-for="quiz in course.quizzes" class="flex gap-5 justify-content-between align-content-center mb-3">
+      <div class="align-self-center" >
+        <p><b>Title: </b>{{ quiz.title }}, <b>Duration: </b> {{ quiz.duration }} mn</p>
+      
+      </div>
+
       <Button label="Start Quiz" style="width: 18rem" />
     </div>
+  </div>
   </div>
 </template>
 
@@ -60,6 +66,7 @@ export default {
       },
     };
   },
+
   methods: {
     courseDetail() {
       this.$router.push({

@@ -1,7 +1,7 @@
 <template>
   <div class="card p-fluid">
     <h4>Add Course</h4>
-    <Button label="Add Quiz" class="w-1" />
+    <Button label="Add Quiz" class="w-1" @click="createQuiz" />
     <div class="flex justify-content-center">
       <div class="w-6 mt-5">
         <div class="field">
@@ -26,12 +26,6 @@
           <a :href="'http://localhost:8081/'+media.url" >{{media.name}}</a>
         </li>
       </ul> -->
-    </div>
-    <h4>Add Quiz</h4>
-    <div class="flex justify-content-center">
-      <div class="w-10 mt-5">
-        <QuizForm />
-      </div>
     </div>
   </div>
 </template>
@@ -95,6 +89,21 @@ export default {
   methods: {
     removeMediaFeild(index) {
       this.media.splice(index, 1);
+    },
+    createQuiz() {
+      if (!this.courseId) {
+        this.$toast.add({
+          severity: "warn",
+          summary: "Please create the course first.",
+
+          life: 3000,
+        });
+        return;
+      }
+      this.$router.push({
+        name: "quiz-create",
+        params: { courseId: this.courseId },
+      });
     },
     addMediaField() {
       let obj = new Object();

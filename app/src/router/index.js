@@ -130,6 +130,21 @@ const asyncRoutes = [
       },
     ],
   },
+  {
+    path: "/quiz",
+    component: App,
+
+    children: [
+      {
+        path: ":quizId(\\d+)",
+        name: "quiz",
+        component: () => import("../views/quizes/Quiz.vue"),
+        meta: {
+          roles: ["super-admin", "teacher", "student"],
+        },
+      },
+    ],
+  },
 
   { path: "/:pathMatch(.*)", redirect: "/404", hidden: true },
 ];

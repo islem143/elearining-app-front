@@ -54,6 +54,7 @@ export default {
       axios.get("/api/module/" +id + "/course").then((res) => {
         this.courses = res.data;
       });
+      
     });
   },
 };
