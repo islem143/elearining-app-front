@@ -128,20 +128,20 @@ const asyncRoutes = [
           roles: ["super-admin", "teacher"],
         },
       },
-    ],
-  },
-  {
-    path: "/quiz",
-    component: App,
-
-    children: [
       {
-        path: ":quizId(\\d+)",
-        name: "quiz",
-        component: () => import("../views/quizes/Quiz.vue"),
-        meta: {
-          roles: ["super-admin", "teacher", "student"],
-        },
+        path: ":courseId(\\d+)/quiz/:quizId(\\d+)",
+        component: App,
+
+        children: [
+          {
+            path: "",
+            name: "quiz",
+            component: () => import("../views/quizes/Quiz.vue"),
+            meta: {
+              roles: ["super-admin", "teacher", "student"],
+            },
+          },
+        ],
       },
     ],
   },
