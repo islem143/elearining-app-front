@@ -2,16 +2,21 @@
   <div>
     {{ parseInt(duration / 1000 / 60) + "mn" }}
     {{ ((duration / 1000) % 60) + "s" }}
+    <p class="text-red-400">{{ showError ? "please select a choice" : "" }}</p>
     <div
-      v-if="questions.length != 0 && currentIndex <= questions.length - 1  && duration>=0"
+      v-if="questions.length != 0 && !quizFinished"
       class="flex w-6 mx-auto flex-column mt-8 justify-content-center align-items-center"
     >
       <Question :question="questions[currentIndex]" />
       <Choices @selectAnswer="selectAnswer" :choices="questions[23].choices" />
-      <Button class="align-self-end" label="Next" @click="nextQuestion" />
+      <Button
+        class="align-self-end"
+        :label="currentIndex < questions.length - 1 ? 'Next' : 'Finish Quiz'"
+        @click="nextQuestion"
+      />
     </div>
     <div v-else>
-      <QuizStat :totalPoints="totalPoints" />
+      <QuizStat :totalPoints="stats.totalPoints" :duration="stats.duration" />
     </div>
   </div>
 </template>
@@ -30,23 +35,31 @@ export default {
   },
   data() {
     return {
+      quizFinished: false,
+      showError: false,
       currentIndex: 0,
       questions: [],
       totalPoints: 0,
       answers: [],
       duration: 0,
+      startDuration: null,
+      timerId: null,
+      stats: {
+        duration: null,
+        totalPoints: null,
+      },
     };
   },
   watch: {
     currentIndex(val) {
       if (val == this.questions.length) {
+        this.finishQuiz();
         this.getScore();
       }
     },
     duration(val) {
       if (val == 0) {
-        console.log("time finished");
-
+        this.finishQuiz();
       }
     },
   },
@@ -56,25 +69,52 @@ export default {
     console.log(courseId, quizId);
     axios.get("api/course/" + courseId + "/quiz/" + quizId).then((res) => {
       this.questions = res.data.questions;
-     // this.duration = res.data.duration * 60 * 1000;
-     this.duration=10000;
-      setInterval(() => {
+
+      this.duration = this.startDuration = res.data.duration * 60 * 1000;
+
+      this.timerId = setInterval(() => {
         this.duration = this.duration - 1000;
       }, 1000);
     });
   },
 
   methods: {
+    finishQuiz() {
+      this.quizFinished = true;
+      clearInterval(this.timerId);
+      this.getScore();
+    },
     getScore() {
       let correctAnswers = this.answers.filter((an) => an.is_correct);
       this.totalPoints = correctAnswers.length;
+      this.stats.totalPoints = correctAnswers.length;
+      this.stats.duration = this.startDuration - this.duration;
     },
     selectAnswer(choice) {
-      console.log(choice);
       this.answers[this.currentIndex] = choice;
     },
     nextQuestion() {
-      this.currentIndex++;
+      if (this.answers[this.currentIndex]) {
+        this.showError = false;
+        console.log(this.answers[this.currentIndex]);
+
+        axios
+          .put(
+            "/api/question/" +
+              this.questions[this.currentIndex].id +
+              "/choice/" +
+              this.answers[this.currentIndex].id +
+              "/attach"
+          )
+          .then((res) => {
+            console.log(res);
+          });
+        this.currentIndex++;
+      } else if (this.currentIndex == this.questions.length) {
+        this.finishQuiz();
+      } else {
+        this.showError = true;
+      }
     },
   },
 };
