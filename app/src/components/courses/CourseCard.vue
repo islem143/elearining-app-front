@@ -34,15 +34,28 @@
     </p>
     <h5>Quiz:</h5>
     <div class="w-5">
-    <div v-for="quiz in course.quizzes" class="flex gap-5 justify-content-between align-content-center mb-3">
-      <div class="align-self-center" >
-        <p><b>Title: </b>{{ quiz.title }}, <b>Duration: </b> {{ quiz.duration }} mn</p>
-      
-      </div>
+      <div
+        v-for="quiz in course.quizzes"
+        class="flex gap-5 justify-content-between align-content-center mb-3"
+      >
+        <div class="align-self-center">
+          <p v-if="quiz.user_id">
+            <b>Title: </b>{{ quiz.title }}, <b> mark: {{ quiz.mark }}</b>
+            <b> time: {{ quiz.time }}</b>
+          </p>
 
-      <Button label="Start Quiz" style="width: 18rem" />
+          <p v-else>
+            <b>Title: </b>{{ quiz.title }}, <b>Duration: </b>
+            {{ quiz.duration }} mn
+          </p>
+        </div>
+
+        <Button
+          :label="quiz.user_id ? 'See Result' : 'Start Quiz'"
+          style="width: 18rem"
+        />
+      </div>
     </div>
-  </div>
   </div>
 </template>
 
@@ -59,6 +72,7 @@ export default {
   },
   data() {
     return {
+      quizzes: [],
       icons: {
         video: "pi pi-video",
         image: "pi pi-image",
@@ -66,6 +80,7 @@ export default {
       },
     };
   },
+  created() {},
 
   methods: {
     courseDetail() {

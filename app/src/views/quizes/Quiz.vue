@@ -35,6 +35,8 @@ export default {
   },
   data() {
     return {
+      quizId: null,
+      courseId: null,
       quizFinished: false,
       showError: false,
       currentIndex: 0,
@@ -54,7 +56,6 @@ export default {
     currentIndex(val) {
       if (val == this.questions.length) {
         this.finishQuiz();
-        this.getScore();
       }
     },
     duration(val) {
@@ -66,6 +67,8 @@ export default {
   created() {
     let courseId = this.$route.params.courseId;
     let quizId = this.$route.params.quizId;
+    this.quizId = quizId;
+    this.courseId = courseId;
     console.log(courseId, quizId);
     axios.get("api/course/" + courseId + "/quiz/" + quizId).then((res) => {
       this.questions = res.data.questions;
@@ -83,6 +86,24 @@ export default {
       this.quizFinished = true;
       clearInterval(this.timerId);
       this.getScore();
+      this.saveQuizResult();
+    },
+    saveQuizResult() {
+      axios
+        .put(
+          "/api/course/" +
+            this.courseId +
+            "/quiz/" +
+            this.quizId +
+            "/saveResult",
+          {
+            mark: this.stats.totalPoints,
+            time: this.stats.duration,
+          }
+        )
+        .then((res) => {
+          console.log(res);
+        });
     },
     getScore() {
       let correctAnswers = this.answers.filter((an) => an.is_correct);
@@ -110,8 +131,6 @@ export default {
             console.log(res);
           });
         this.currentIndex++;
-      } else if (this.currentIndex == this.questions.length) {
-        this.finishQuiz();
       } else {
         this.showError = true;
       }
