@@ -4,7 +4,7 @@
     {{ ((duration / 1000) % 60) + "s" }}
     <p class="text-red-400">{{ showError ? "please select a choice" : "" }}</p>
     <div
-      v-if="questions.length != 0 && !quizFinished"
+      v-if="questions.length != 0 && !quizFinished && !done"
       class="flex w-6 mx-auto flex-column mt-8 justify-content-center align-items-center"
     >
       <Question :question="questions[currentIndex]" />
@@ -46,6 +46,7 @@ export default {
       duration: 0,
       startDuration: null,
       timerId: null,
+      quizDone: false,
       stats: {
         duration: null,
         totalPoints: null,
@@ -69,16 +70,28 @@ export default {
     let quizId = this.$route.params.quizId;
     this.quizId = quizId;
     this.courseId = courseId;
-    console.log(courseId, quizId);
-    axios.get("api/course/" + courseId + "/quiz/" + quizId).then((res) => {
-      this.questions = res.data.questions;
+    axios
+      .get("api/course/" + courseId + "/quiz/" + quizId + "/doneQuiz")
+      .then((res) => {
+        if (!res.data) {
+          axios
+            .get("api/course/" + courseId + "/quiz/" + quizId)
+            .then((res) => {
+              this.questions = res.data.questions;
 
-      this.duration = this.startDuration = res.data.duration * 60 * 1000;
+              this.duration = this.startDuration =
+                res.data.duration * 60 * 1000;
 
-      this.timerId = setInterval(() => {
-        this.duration = this.duration - 1000;
-      }, 1000);
-    });
+              this.timerId = setInterval(() => {
+                this.duration = this.duration - 1000;
+              }, 1000);
+            });
+          return;
+        }
+        this.quizDone = true;
+        this.stats.totalPoints = res.data.pivot.mark;
+        this.stats.duration = res.data.pivot.time;
+      });
   },
 
   methods: {

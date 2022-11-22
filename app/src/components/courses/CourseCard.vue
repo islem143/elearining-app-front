@@ -51,6 +51,7 @@
         </div>
 
         <Button
+          @click="goToQuiz(quiz)"
           :label="quiz.user_id ? 'See Result' : 'Start Quiz'"
           style="width: 18rem"
         />
@@ -83,6 +84,15 @@ export default {
   created() {},
 
   methods: {
+    goToQuiz(quiz) {
+      this.$router.push({
+        name: "quiz",
+        params: {
+          courseId: this.course.id,
+          quizId: quiz.id,
+        },
+      });
+    },
     courseDetail() {
       this.$router.push({
         name: "course-detail",
