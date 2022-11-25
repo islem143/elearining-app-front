@@ -116,12 +116,32 @@ export default {
     let courseId = this.$route.params.courseId;
     let quizId = this.$route.params.quizId;
     this.courseId = courseId;
+    this.quizId = quizId;
     if (quizId) {
       this.quizId = quizId;
       axios.get("/api/course/" + courseId + "/quiz/" + quizId).then((res) => {
         this.quiz = res.data;
+        if (res.data.questions.length != 0) {
+          this.questions = res.data.questions;
+        }
       });
     }
+  },
+  watch: {
+    questions: {
+      handler(val) {
+        for (let i = 0; i < val.length; i++) {
+          if (val[i].choices.length != 0) {
+            this.addOptions(i, val[i].choices.length);
+            for (let j = 0; j < val[i].choices.length; j++) {
+              if (val[i].choices[j].is_correct) {
+                this.questions[i].option = this.questions[i].options[j];
+              }
+            }
+          }
+        }
+      },
+    },
   },
 
   validations() {
@@ -150,21 +170,45 @@ export default {
         });
         return;
       }
+      let i=100;
       this.questions.forEach((question) => {
-        axios
-          .post("/api/quiz/" + this.quizId + "/question", {
-            text: question.text,
-          })
-          .then((res) => {
-            let questionId = res.data.id;
+        
+        if (!question.id) {
+          setTimeout(() => {
             axios
-              .post("/api/question/" + questionId + "/choice", {
-                choices: question.choices,
+              .post("/api/quiz/" + this.quizId + "/question", {
+                text: question.text,
               })
               .then((res) => {
-                console.log(res.data);
+                let questionId = res.data.id;
+                axios
+                  .post("/api/question/" + questionId + "/choice", {
+                    choices: question.choices,
+                  })
+                  .then((res) => {
+                    console.log(res.data);
+                  });
               });
-          });
+          }, i);
+        } else {
+          let choices=question.choices.filter(c=>c.id);
+          setTimeout(() => {
+            axios
+              .put("/api/quiz/" + this.quizId + "/question/" + question.id, {
+                text: question.text,
+              })
+              .then((res) => {
+                axios
+                  .put("/api/question/" + question.id + "/choice", {
+                    choices: question.choices,
+                  })
+                  .then((res) => {
+                    console.log(res.data);
+                  });
+              });
+          },i);
+        }
+        i+=100;
       });
     },
     createQuiz() {
@@ -172,19 +216,38 @@ export default {
         .post("/api/course/" + this.courseId + "/quiz", this.quiz)
         .then((res) => {
           let quizId = res.data.id;
+          this.quizId = quizId;
           this.$router.push({
             name: "quiz-edit",
-            params: { courseId: this.courseId, quizId },
+            params: { courseId: this.courseId, quizId:quizId },
           });
         });
     },
-    addChoice(index) {
-      let object = new Object({ text: "", isCorrect: false });
-      this.questions[index].choices.push(object);
-      this.questions[index].options.push({
-        name: "option " + parseInt(this.questions[index].choices.length),
-        code: this.questions[index].choices.length,
+    addOptions(questionIndex, n) {
+      if (!("options" in this.questions[questionIndex])) {
+        this.questions[questionIndex].options = [];
+      }
+      for (let i = 0; i < n; i++) {
+        this.questions[questionIndex].options.push({
+          name: "option " + parseInt(i + 1),
+          code: parseInt(i + 1),
+        });
+      }
+    },
+    addOption(questionIndex) {
+      if (!("options" in this.questions[questionIndex])) {
+        this.questions[questionIndex].options = [];
+      }
+      this.questions[questionIndex].options.push({
+        name:
+          "option " + parseInt(this.questions[questionIndex].choices.length),
+        code: this.questions[questionIndex].choices.length,
       });
+    },
+    addChoice(index) {
+      let object = new Object({ text: "", is_correct: false });
+      this.questions[index].choices.push(object);
+      this.addOption(index);
     },
     deleteChoice(index) {
       this.questions[index].choices.pop();
@@ -192,19 +255,20 @@ export default {
     },
     setCorrectAnswer(questionIndex) {
       let index = this.questions[questionIndex].option.code - 1;
+
       this.questions[questionIndex].choices = this.questions[
         questionIndex
       ].choices.map((c) => ({
         ...c,
-        isCorrect: false,
+        is_correct: false,
       }));
-      this.questions[questionIndex].choices[index].isCorrect = true;
+      this.questions[questionIndex].choices[index].is_correct = true;
       if (questionIndex == this.questions.length - 1) {
         this.questions.push(
           new Object({
             title: "",
             choices: [],
-            isCorrect: "",
+            is_correct: "",
             option: "",
             options: [],
           })

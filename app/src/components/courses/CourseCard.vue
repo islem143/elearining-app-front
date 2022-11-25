@@ -55,6 +55,11 @@
           :label="quiz.user_id ? 'See Result' : 'Start Quiz'"
           style="width: 18rem"
         />
+        <Button
+          @click="editQuiz(quiz)"
+          label="Edit Quiz"
+          style="width: 18rem"
+        />
       </div>
     </div>
   </div>
@@ -87,6 +92,15 @@ export default {
     goToQuiz(quiz) {
       this.$router.push({
         name: "quiz",
+        params: {
+          courseId: this.course.id,
+          quizId: quiz.id,
+        },
+      });
+    },
+    editQuiz(quiz){
+      this.$router.push({
+        name: "quiz-edit",
         params: {
           courseId: this.course.id,
           quizId: quiz.id,

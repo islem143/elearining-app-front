@@ -1,23 +1,27 @@
 <template>
   <div>
-    {{ parseInt(duration / 1000 / 60) + "mn" }}
-    {{ ((duration / 1000) % 60) + "s" }}
     <p class="text-red-400">{{ showError ? "please select a choice" : "" }}</p>
+
     <div
-      v-if="questions.length != 0 && !quizFinished && !done"
+      v-if="questions.length != 0 && !quizFinished && !quizDone"
       class="flex w-6 mx-auto flex-column mt-8 justify-content-center align-items-center"
     >
+      <div>
+        {{ parseInt(duration / 1000 / 60) + "mn" }}
+        {{ ((duration / 1000) % 60) + "s" }}
+      </div>
       <Question :question="questions[currentIndex]" />
-      <Choices @selectAnswer="selectAnswer" :choices="questions[23].choices" />
+      <Choices @selectAnswer="selectAnswer" :selectedChoice="answers[currentIndex]" :choices="questions[currentIndex].choices" />
       <Button
         class="align-self-end"
         :label="currentIndex < questions.length - 1 ? 'Next' : 'Finish Quiz'"
         @click="nextQuestion"
       />
     </div>
-    <div v-else>
+    <div v-else-if="quizDone || quizFinished">
       <QuizStat :totalPoints="stats.totalPoints" :duration="stats.duration" />
     </div>
+    <div v-else>Quiz Will be available sooner.</div>
   </div>
 </template>
 

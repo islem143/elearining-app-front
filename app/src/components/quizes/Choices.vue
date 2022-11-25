@@ -1,5 +1,5 @@
 <template>
-  <Choice @selectAnswer="$emit('selectAnswer',choice)" v-for="choice in choices" :choice="choice"/>
+  <Choice :selectedChoice="selectedChoice" @selectAnswer="$emit('selectAnswer',choice)" v-for="choice in choices" :choice="choice"/>
 </template>
 
 <script>
@@ -9,6 +9,9 @@ export default {
   props: {
     choices: {
       type: Array,
+    },
+    selectedChoice: {
+      type: Object,
     },
   },
   components: {
