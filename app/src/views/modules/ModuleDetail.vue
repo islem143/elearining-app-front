@@ -6,7 +6,7 @@
     <div class="p-5">
       <div class="flex justify-content-between mb-5">
         <h3>Courses</h3>
-        <router-link :to="{ name: 'course-create', params: { moduleId: id } }">
+        <router-link   v-if="role=='teacher'" :to="{ name: 'course-create', params: { moduleId: id } }">
           <Button
             style="width: 145px"
             icon="pi pi-plus"
@@ -27,6 +27,7 @@ import CouresListVue from "../../components/courses/CouresList.vue";
 import axios from "../../http";
 
 export default {
+  inject:['role'],
   name: "ModuleDetail",
   components: {
     ModuleInfoVue,

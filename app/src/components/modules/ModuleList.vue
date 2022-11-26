@@ -21,7 +21,7 @@
                   placeholder="Sort By Price"
                   @change="onSortChange($event)"
                 /> -->
-                <router-link :to="{ name: 'module-create' }">
+                <router-link v-if="role=='teacher'" :to="{ name: 'module-create' }">
                   <Button
                     label="New Module"
                     icon="pi pi-plus"
@@ -56,12 +56,14 @@
                     icon="pi pi-pencil"
                     class="p-button-rounded p-button-success mr-2"
                     @click="editModule(slotProps.data)"
+                    v-if="role=='teacher'"
                   />
 
                   <Button
                     icon="pi pi-trash"
                     class="p-button-rounded p-button-warning"
                     @click="confirmDeleteModule(slotProps.data)"
+                    v-if="role=='teacher'"
                   />
                 </div>
               </div>
@@ -93,12 +95,14 @@
                     icon="pi pi-pencil"
                     class="p-button-rounded p-button-success mr-2"
                     @click="editModule(slotProps.data)"
+                    v-if="role=='teacher'"
                   />
 
                   <Button
                     icon="pi pi-trash"
                     class="p-button-rounded p-button-warning"
                     @click="confirmDeleteModule(slotProps.data)"
+                    v-if="role=='teacher'"
                   />
                 </div>
               </div>
@@ -113,6 +117,7 @@
 <script>
 import axios from "../../http";
 export default {
+  inject:['role'],
   data() {
     return {
       data: [],
@@ -139,14 +144,18 @@ export default {
       return info.img_url.split("/")[2];
     },
     goTo(data) {
-      console.log(data);
+
+      
       this.$router.push({
         name: "module-detail",
         params: { moduleId: data.id },
       });
     },
     editModule(data) {
-      this.$router.push({ name: "module-edit", params: { moduleId: data.id } });
+      if(this.role=="teacher"){
+
+        this.$router.push({ name: "module-edit", params: { moduleId: data.id } });
+      }
     },
     onSortChange(event) {
       const value = event.value.value;

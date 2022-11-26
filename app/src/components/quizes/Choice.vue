@@ -1,7 +1,7 @@
 <template>
   <div
     :class="
-      'w-10 card py-4 px-6 cursor-pointer hover:surface-400 ' +
+      'w-9 card py-4 px-6 cursor-pointer hover:surface-400 ' +
       selectedChoice
     "
     @click="$emit('selectAnswer', choice)"

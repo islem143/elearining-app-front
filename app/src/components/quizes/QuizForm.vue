@@ -112,6 +112,7 @@ export default {
       ],
     };
   },
+
   created() {
     let courseId = this.$route.params.courseId;
     let quizId = this.$route.params.quizId;
@@ -170,9 +171,8 @@ export default {
         });
         return;
       }
-      let i=100;
+      let i = 100;
       this.questions.forEach((question) => {
-        
         if (!question.id) {
           setTimeout(() => {
             axios
@@ -187,11 +187,17 @@ export default {
                   })
                   .then((res) => {
                     console.log(res.data);
+                    this.$toast.add({
+                      severity: "success",
+                      summary: "Questions were added.",
+
+                      life: 3000,
+                    });
                   });
               });
           }, i);
         } else {
-          let choices=question.choices.filter(c=>c.id);
+          let choices = question.choices.filter((c) => c.id);
           setTimeout(() => {
             axios
               .put("/api/quiz/" + this.quizId + "/question/" + question.id, {
@@ -203,12 +209,24 @@ export default {
                     choices: question.choices,
                   })
                   .then((res) => {
-                    console.log(res.data);
+                    this.$toast.add({
+                      severity: "success",
+                      summary: "Questions were updated.",
+
+                      life: 3000,
+                    }).catch(err=>{
+                      this.$toast.add({
+                      severity: "danger",
+                      summary: "An Error occured.",
+
+                      life: 3000,
+                    });
+                    });
                   });
               });
-          },i);
+          }, i);
         }
-        i+=100;
+        i += 100;
       });
     },
     createQuiz() {
@@ -219,7 +237,7 @@ export default {
           this.quizId = quizId;
           this.$router.push({
             name: "quiz-edit",
-            params: { courseId: this.courseId, quizId:quizId },
+            params: { courseId: this.courseId, quizId: quizId },
           });
         });
     },

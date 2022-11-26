@@ -4,10 +4,11 @@
 
     <div
       v-if="questions.length != 0 && !quizFinished && !quizDone"
-      class="flex w-6 mx-auto flex-column mt-8 justify-content-center align-items-center"
+      class="flex w-8 mx-auto flex-column mt-8 justify-content-center align-items-center"
     >
-      <div>
-        {{ parseInt(duration / 1000 / 60) + "mn" }}
+      <div class="p-card p-3 mb-3 align-self-end">
+        Time:  
+         {{ parseInt(duration / 1000 / 60) + "mn" }}
         {{ ((duration / 1000) % 60) + "s" }}
       </div>
       <Question :question="questions[currentIndex]" />
@@ -30,6 +31,7 @@ import Question from "../../components/quizes/Question.vue";
 import Choices from "../../components/quizes/Choices.vue";
 import QuizStat from "../../components/quizes/QuizStat.vue";
 import axios from "../../http";
+
 export default {
   name: "Quiz",
   components: {

@@ -10,6 +10,7 @@
 
       <div>
         <Button
+          v-if="role=='teacher'"
           label="Edit Course"
           icon="pi pi-pencil"
           class="p-button-rounded p-button-success mr-2"
@@ -17,7 +18,7 @@
         />
       </div>
     </div>
-    <h5>Courses:</h5>
+    <h5>Learn:</h5>
     <p v-for="media in course.media">
       <i
         :class="
@@ -32,9 +33,10 @@
         >{{ media.name }}</a
       >
     </p>
-    <h5>Quiz:</h5>
-    <div class="w-5">
+    <h5>Practise:</h5>
+    <div class="w-5" >
       <div
+      v-if="course.quizzes.length!=0"
         v-for="quiz in course.quizzes"
         class="flex gap-5 justify-content-between align-content-center mb-3"
       >
@@ -56,18 +58,26 @@
           style="width: 18rem"
         />
         <Button
+          v-if="role=='teacher'"
           @click="editQuiz(quiz)"
           label="Edit Quiz"
           style="width: 18rem"
         />
       </div>
+  
+      <div v-else>
+        <p>This course has not a quiz. </p>
+      </div>
     </div>
   </div>
+  {{role}}
 </template>
 
 <script>
+
 export default {
   name: "CourseCard",
+  inject:['role'],
   props: {
     course: {
       type: Object,

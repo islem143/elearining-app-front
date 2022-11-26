@@ -97,6 +97,7 @@ import TriStateCheckbox from 'primevue/tristatecheckbox';
 import CodeHighlight from './AppCodeHighlight';
 import BlockViewer from './BlockViewer.vue';
 import store from './store'
+import {getRoles} from './utils/auth'
 router.beforeEach(function(to, from, next) {
     window.scrollTo(0, 0);
     next();
@@ -111,6 +112,7 @@ app.use(ConfirmationService);
 app.use(ToastService);
 app.use(router);
 app.use(store);
+app.provide("role",getRoles()[0]);
 
 app.directive('tooltip', Tooltip);
 app.directive('ripple', Ripple);
