@@ -183,6 +183,7 @@ export default {
     },
     editModule(data) {
       if (this.role == "teacher") {
+        
         this.$router.push({
           name: "module-edit",
           params: { moduleId: data.id },

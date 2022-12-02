@@ -82,6 +82,12 @@ export default {
             .put("/api/module/" + this.id, this.info)
             .then(async (res) => {
               let file = this.$refs.image.files[0];
+              this.$toast.add({
+                severity: "success",
+                summary: "Module  updated.",
+
+                life: 3000,
+              });
               if (file) {
                 let formData = new FormData();
                 formData.append("image", file);

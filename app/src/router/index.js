@@ -73,7 +73,7 @@ const asyncRoutes = [
         },
       },
       {
-        path: "moduleId(\\d+)/edit",
+        path: ":moduleId(\\d+)/edit",
         name: "module-edit",
         component: () => import("../views/modules/ModuleEdit.vue"),
         meta: {
