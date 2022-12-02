@@ -70,7 +70,7 @@
       </div>
     </div>
   </div>
-  {{role}}
+
 </template>
 
 <script>

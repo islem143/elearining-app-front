@@ -145,6 +145,21 @@ const asyncRoutes = [
       },
     ],
   },
+  {
+    path: "/logs",
+    component: App,
+
+    children: [
+      {
+        path: "",
+        name: "log-list",
+        component: () => import("../views/logs/LogList.vue"),
+        meta: {
+          roles: ["super-admin", "teacher"],
+        },
+      },
+    ],
+  },
 
   { path: "/:pathMatch(.*)", redirect: "/404", hidden: true },
 ];

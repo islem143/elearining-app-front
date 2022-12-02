@@ -25,14 +25,21 @@
       <i class="pi pi-ellipsis-v"></i>
     </button>
     <ul class="layout-topbar-menu hidden lg:flex origin-top">
+
       <li>
-        <p class="p-link mt-2 hover:bg-gray-300 p-2">Dashboard</p>
+        <router-link :to="{ name: 'dashboard' }">
+          <p class="p-link mt-2 hover:bg-gray-300 p-2">Dashboard</p></router-link>
+    
       </li>
       <li>
-        <p class="p-link mt-2 hover:bg-gray-300 p-2">Modules</p>
+        <router-link :to="{ name: 'module-list' }">
+          <p class="p-link mt-2 hover:bg-gray-300 p-2">Modules</p></router-link
+        >
       </li>
       <li>
-        <p class="p-link mt-2 hover:bg-gray-300 p-2">History</p>
+        <router-link :to="{ name: 'log-list' }">
+          <p class="p-link mt-2 hover:bg-gray-300 p-2">History</p></router-link
+        >
       </li>
       <li>
         <p @click="logout" class="p-link mt-2 hover:bg-gray-300 p-2">Logout</p>
@@ -77,7 +84,6 @@ export default {
     logout() {
       store.dispatch("auth/logout").then((res) => {
         this.$router.replace({ name: "login" });
-        
       });
     },
   },
