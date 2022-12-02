@@ -36,7 +36,7 @@
           <p class="p-link mt-2 hover:bg-gray-300 p-2">Modules</p></router-link
         >
       </li>
-      <li>
+      <li v-if="role=='teacher'">
         <router-link :to="{ name: 'log-list' }">
           <p class="p-link mt-2 hover:bg-gray-300 p-2">History</p></router-link
         >
@@ -69,6 +69,7 @@
 <script>
 import store from "./store";
 export default {
+  inject:['role'],
   methods: {
     onMenuToggle(event) {
       this.$emit("menu-toggle", event);
