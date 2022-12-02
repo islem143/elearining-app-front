@@ -71,10 +71,10 @@ const authStore = {
       return await axios
         .post("/api/register", user)
         .then((res) => {
-          const user = res.data.user;
-          const token = res.data.token;
-          commit("setUser", user);
-          commit("setToken", token);
+          // const user = res.data.user;
+          // const token = res.data.token;
+          // commit("setUser", user);
+          // commit("setToken", token);
 
           return res;
         })
@@ -87,7 +87,7 @@ const authStore = {
         .post("/api/logout")
         .then((res) => {
           commit("logout");
-          
+
           return res;
         })
         .catch((err) => {

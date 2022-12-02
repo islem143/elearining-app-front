@@ -7,6 +7,11 @@ const staticRoutes = [
     name: "login",
     component: () => import("../views/auth/Login.vue"),
   },
+  {
+    path: "/register",
+    name: "register",
+    component: () => import("../views/auth/Register.vue"),
+  },
 
   //   {
   //     path: '/error',
@@ -219,8 +224,10 @@ router.beforeEach((to, from) => {
       setHasRoutes();
       return to.fullPath;
     }
-  } else if (to.name !== "login") {
+  } else if (to.name !== "login" && to.name !== "register") {
     return { name: "login" };
+  } else {
+    return true;
   }
   // if (hasToken) {
   //   return { name: "Login" };

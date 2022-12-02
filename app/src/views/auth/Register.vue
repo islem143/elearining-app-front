@@ -27,12 +27,23 @@
           "
         >
           <div class="w-full md:w-10 mx-auto">
+            <label for="name" class="block text-900 text-xl font-medium mb-2"
+              >Name</label
+            >
+            <InputText
+              id="name"
+              v-model="info.name"
+              type="text"
+              class="w-full mb-3"
+              placeholder="Name"
+              style="padding: 1rem"
+            />
             <label for="email1" class="block text-900 text-xl font-medium mb-2"
               >Email</label
             >
             <InputText
               id="email1"
-              v-model="email"
+              v-model="info.email"
               type="text"
               class="w-full mb-3"
               placeholder="Email"
@@ -46,15 +57,29 @@
             >
             <Password
               id="password1"
-              v-model="password"
+              v-model="info.password"
               placeholder="Password"
               :toggleMask="true"
               class="w-full mb-3"
               inputClass="w-full"
               inputStyle="padding:1rem"
             ></Password>
+            <label
+              for="password2"
+              class="block text-900 font-medium text-xl mb-2"
+              >Password Confirmation</label
+            >
+            <Password
+              id="password2"
+              v-model="info.password_confirmation"
+              placeholder="Password Confirmation"
+              :toggleMask="true"
+              class="w-full mb-3"
+              inputClass="w-full"
+              inputStyle="padding:1rem"
+            ></Password>
 
-            <div class="flex align-items-center justify-content-between mb-5">
+            <!-- <div class="flex align-items-center justify-content-between mb-5">
               <div class="flex align-items-center">
                 <Checkbox
                   id="rememberme1"
@@ -69,7 +94,7 @@
                 style="color: var(--primary-color)"
                 >Forgot password?</a
               >
-            </div>
+            </div> -->
             <Button
               label="Sign In"
               class="w-full p-3 text-xl"
@@ -85,12 +110,15 @@
 <script>
 import store from "../../store";
 export default {
-  name:'Login',
+  name: "Register",
   data() {
     return {
-      email: "",
-      password: "",
-      checked: false,
+      info: {
+        name: "",
+        email: "",
+        password: "",
+        password_confirmation: "",
+      },
     };
   },
   computed: {
@@ -101,11 +129,16 @@ export default {
   },
   methods: {
     login() {
-      store
-        .dispatch("auth/login", { email: this.email, password: this.password })
-        .then(() => {
-          this.$router.push("/dashboard");
-        });
+      store.dispatch("auth/register", this.info).then(() => {
+        this.$toast
+          .add({
+            severity: "success",
+            summary: "Account was created successfully.",
+
+            life: 3000,
+          })
+          this.$router.push({ name: "login" });
+      });
     },
   },
 };
