@@ -87,6 +87,7 @@ const authStore = {
         .post("/api/logout")
         .then((res) => {
           commit("logout");
+          
           return res;
         })
         .catch((err) => {

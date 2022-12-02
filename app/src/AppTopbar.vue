@@ -26,13 +26,16 @@
     </button>
     <ul class="layout-topbar-menu hidden lg:flex origin-top">
       <li>
-        <p href="#" class="p-link mt-2 hover:bg-gray-300 p-2">Dashboard</p>
+        <p class="p-link mt-2 hover:bg-gray-300 p-2">Dashboard</p>
       </li>
       <li>
-        <p href="#" class="p-link mt-2 hover:bg-gray-300 p-2">Modules</p>
+        <p class="p-link mt-2 hover:bg-gray-300 p-2">Modules</p>
       </li>
       <li>
-        <p href="#" class="p-link mt-2 hover:bg-gray-300 p-2">History</p>
+        <p class="p-link mt-2 hover:bg-gray-300 p-2">History</p>
+      </li>
+      <li>
+        <p @click="logout" class="p-link mt-2 hover:bg-gray-300 p-2">Logout</p>
       </li>
       <!-- <li>
 				<button class="p-link layout-topbar-button">
@@ -57,6 +60,7 @@
 </template>
 
 <script>
+import store from "./store";
 export default {
   methods: {
     onMenuToggle(event) {
@@ -69,6 +73,12 @@ export default {
       return this.$appState.darkTheme
         ? "/images/logo-white.svg"
         : "/images/logo-dark.svg";
+    },
+    logout() {
+      store.dispatch("auth/logout").then((res) => {
+        this.$router.replace({ name: "login" });
+        
+      });
     },
   },
   computed: {
