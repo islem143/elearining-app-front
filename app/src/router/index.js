@@ -151,14 +151,14 @@ const asyncRoutes = [
     ],
   },
   {
-    path: "/logs",
+    path: "/history",
     component: App,
 
     children: [
       {
         path: "",
-        name: "log-list",
-        component: () => import("../views/logs/LogList.vue"),
+        name: "history-list",
+        component: () => import("../views/history/LogList.vue"),
         meta: {
           roles: ["super-admin", "teacher"],
         },
