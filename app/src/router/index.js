@@ -7,6 +7,11 @@ const staticRoutes = [
     name: "login",
     component: () => import("../views/auth/Login.vue"),
   },
+  {
+    path: "/register",
+    name: "register",
+    component: () => import("../views/auth/Register.vue"),
+  },
 
   //   {
   //     path: '/error',
@@ -73,7 +78,7 @@ const asyncRoutes = [
         },
       },
       {
-        path: "moduleId(\\d+)/edit",
+        path: ":moduleId(\\d+)/edit",
         name: "module-edit",
         component: () => import("../views/modules/ModuleEdit.vue"),
         meta: {
@@ -145,6 +150,21 @@ const asyncRoutes = [
       },
     ],
   },
+  {
+    path: "/logs",
+    component: App,
+
+    children: [
+      {
+        path: "",
+        name: "log-list",
+        component: () => import("../views/logs/LogList.vue"),
+        meta: {
+          roles: ["super-admin", "teacher"],
+        },
+      },
+    ],
+  },
 
   { path: "/:pathMatch(.*)", redirect: "/404", hidden: true },
 ];
@@ -204,8 +224,10 @@ router.beforeEach((to, from) => {
       setHasRoutes();
       return to.fullPath;
     }
-  } else if (to.name !== "login") {
+  } else if (to.name !== "login" && to.name !== "register") {
     return { name: "login" };
+  } else {
+    return true;
   }
   // if (hasToken) {
   //   return { name: "Login" };

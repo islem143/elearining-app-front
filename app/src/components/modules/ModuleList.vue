@@ -21,7 +21,10 @@
                   placeholder="Sort By Price"
                   @change="onSortChange($event)"
                 /> -->
-                <router-link v-if="role=='teacher'" :to="{ name: 'module-create' }">
+                <router-link
+                  v-if="role == 'teacher'"
+                  :to="{ name: 'module-create' }"
+                >
                   <Button
                     label="New Module"
                     icon="pi pi-plus"
@@ -36,11 +39,12 @@
             </div>
           </template>
           <template #list="slotProps">
-            <div class="col-12 cursor-pointer" @click="goTo(slotProps.data)">
+            <div class="col-12 cursor-pointer">
               <div
                 class="flex flex-column md:flex-row align-items-center p-3 w-full"
               >
                 <img
+                  @click="goTo(slotProps.data)"
                   :src="'http://localhost:8081/images/' + src(slotProps.data)"
                   :alt="slotProps.data.name"
                   class="my-4 md:my-0 w-9 md:w-10rem shadow-2 mr-5"
@@ -56,14 +60,14 @@
                     icon="pi pi-pencil"
                     class="p-button-rounded p-button-success mr-2"
                     @click="editModule(slotProps.data)"
-                    v-if="role=='teacher'"
+                    v-if="role == 'teacher'"
                   />
 
                   <Button
                     icon="pi pi-trash"
                     class="p-button-rounded p-button-warning"
                     @click="confirmDeleteModule(slotProps.data)"
-                    v-if="role=='teacher'"
+                    v-if="role == 'teacher'"
                   />
                 </div>
               </div>
@@ -71,16 +75,14 @@
           </template>
 
           <template #grid="slotProps">
-            <div
-              class="col-12 md:col-3 cursor-pointer"
-              @click="goTo(slotProps.data)"
-            >
+            <div class="col-12 md:col-3 cursor-pointer">
               <div class="card m-3 border-1 surface-border">
                 <div
                   class="flex align-items-center justify-content-between"
                 ></div>
                 <div class="text-center">
                   <img
+                    @click="goTo(slotProps.data)"
                     :src="'http://localhost:8081/images/' + src(slotProps.data)"
                     :alt="slotProps.data.name"
                     class="w-9 shadow-2 my-3 mx-0"
@@ -95,20 +97,48 @@
                     icon="pi pi-pencil"
                     class="p-button-rounded p-button-success mr-2"
                     @click="editModule(slotProps.data)"
-                    v-if="role=='teacher'"
+                    v-if="role == 'teacher'"
                   />
 
                   <Button
                     icon="pi pi-trash"
                     class="p-button-rounded p-button-warning"
                     @click="confirmDeleteModule(slotProps.data)"
-                    v-if="role=='teacher'"
+                    v-if="role == 'teacher'"
                   />
                 </div>
               </div>
             </div>
           </template>
         </DataView>
+        <Dialog
+          v-model:visible="deleteModuleDialog"
+          :style="{ width: '450px' }"
+          header="Confirm"
+          :modal="true"
+        >
+          <div class="confirmation-content">
+            <i
+              class="pi pi-exclamation-triangle mr-3"
+              style="font-size: 2rem"
+            />
+            <span>Are you sure you want to delete the selected module?</span>
+          </div>
+          <template #footer>
+            <Button
+              label="No"
+              icon="pi pi-times"
+              class="p-button-text"
+              @click="deleteModuleDialog = false"
+            />
+            <Button
+              label="Yes"
+              icon="pi pi-check"
+              class="p-button-text"
+              @click="deleteModule"
+            />
+          </template>
+        </Dialog>
       </div>
     </div>
   </div>
@@ -117,9 +147,11 @@
 <script>
 import axios from "../../http";
 export default {
-  inject:['role'],
+  inject: ["role"],
   data() {
     return {
+      selectedModule: null,
+      deleteModuleDialog: false,
       data: [],
       layout: "grid",
       sortKey: null,
@@ -144,18 +176,35 @@ export default {
       return info.img_url.split("/")[2];
     },
     goTo(data) {
-
-      
       this.$router.push({
         name: "module-detail",
         params: { moduleId: data.id },
       });
     },
     editModule(data) {
-      if(this.role=="teacher"){
-
-        this.$router.push({ name: "module-edit", params: { moduleId: data.id } });
+      if (this.role == "teacher") {
+        
+        this.$router.push({
+          name: "module-edit",
+          params: { moduleId: data.id },
+        });
       }
+    },
+    async deleteModule() {
+      await axios
+        .delete("/api/module/" + this.selectedModule.id)
+        .then((res) => {
+          this.deleteModuleDialog = false;
+          let index = this.data.findIndex(
+            (d) => d.id == this.selectedModule.id
+          );
+          this.data.splice(index, 1);
+        });
+    },
+
+    confirmDeleteModule(data) {
+      this.deleteModuleDialog = true;
+      this.selectedModule = data;
     },
     onSortChange(event) {
       const value = event.value.value;

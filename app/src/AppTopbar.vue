@@ -25,14 +25,24 @@
       <i class="pi pi-ellipsis-v"></i>
     </button>
     <ul class="layout-topbar-menu hidden lg:flex origin-top">
+
       <li>
-        <p href="#" class="p-link mt-2 hover:bg-gray-300 p-2">Dashboard</p>
+        <router-link :to="{ name: 'dashboard' }">
+          <p class="p-link mt-2 hover:bg-gray-300 p-2">Dashboard</p></router-link>
+    
       </li>
       <li>
-        <p href="#" class="p-link mt-2 hover:bg-gray-300 p-2">Modules</p>
+        <router-link :to="{ name: 'module-list' }">
+          <p class="p-link mt-2 hover:bg-gray-300 p-2">Modules</p></router-link
+        >
+      </li>
+      <li v-if="role=='teacher'">
+        <router-link :to="{ name: 'log-list' }">
+          <p class="p-link mt-2 hover:bg-gray-300 p-2">History</p></router-link
+        >
       </li>
       <li>
-        <p href="#" class="p-link mt-2 hover:bg-gray-300 p-2">History</p>
+        <p @click="logout" class="p-link mt-2 hover:bg-gray-300 p-2">Logout</p>
       </li>
       <!-- <li>
 				<button class="p-link layout-topbar-button">
@@ -57,7 +67,9 @@
 </template>
 
 <script>
+import store from "./store";
 export default {
+  inject:['role'],
   methods: {
     onMenuToggle(event) {
       this.$emit("menu-toggle", event);
@@ -69,6 +81,11 @@ export default {
       return this.$appState.darkTheme
         ? "/images/logo-white.svg"
         : "/images/logo-dark.svg";
+    },
+    logout() {
+      store.dispatch("auth/logout").then((res) => {
+        this.$router.replace({ name: "login" });
+      });
     },
   },
   computed: {
