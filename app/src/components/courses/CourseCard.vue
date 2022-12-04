@@ -1,6 +1,16 @@
 <template>
   <div
-    class="pa-7 cursor-pointer p-5 m-4 border-round transition-all transition-duration-200 hover:bg-gray-100 shadow-4 hover:shadow-6"
+    class="
+      pa-7
+      cursor-pointer
+      p-5
+      m-4
+      border-round
+      transition-all transition-duration-200
+      hover:bg-gray-100
+      shadow-4
+      hover:shadow-6
+    "
   >
     <div class="flex justify-content-between">
       <div>
@@ -10,7 +20,7 @@
 
       <div>
         <Button
-          v-if="role=='teacher'"
+          v-if="role == 'teacher'"
           label="Edit Course"
           icon="pi pi-pencil"
           class="p-button-rounded p-button-success mr-2"
@@ -34,11 +44,11 @@
       >
     </p>
     <h5>Practise:</h5>
-    <div class="w-5" >
+    <div>
       <div
-      v-if="course.quizzes.length!=0"
+        v-if="course.quizzes.length != 0"
         v-for="quiz in course.quizzes"
-        class="flex gap-5 justify-content-between align-content-center mb-3"
+        class="flex justify-content-between align-content-center mb-3"
       >
         <div class="align-self-center">
           <p v-if="quiz.user_id">
@@ -52,32 +62,36 @@
           </p>
         </div>
 
-        <Button
-          @click="goToQuiz(quiz)"
-          :label="quiz.user_id ? 'See Result' : 'Start Quiz'"
-          style="width: 18rem"
-        />
-        <Button
-          v-if="role=='teacher'"
-          @click="editQuiz(quiz)"
-          label="Edit Quiz"
-          style="width: 18rem"
-        />
+        <div class="flex gap-2">
+          <Button
+            class="text-sm"
+            @click="goToQuiz(quiz)"
+            :label="quiz.user_id ? 'See Result' : 'Start Quiz'"
+          />
+          <Button
+            class="text-sm"
+            v-if="role == 'teacher'"
+            @click="editQuiz(quiz)"
+            label="Edit Quiz"
+          />
+        </div>
       </div>
-  
+
       <div v-else>
-        <p>This course has not a quiz. </p>
+        <p>This course has not a quiz.</p>
       </div>
     </div>
   </div>
+<<<<<<< HEAD
 
+=======
+>>>>>>> d9daec6... s
 </template>
 
 <script>
-
 export default {
   name: "CourseCard",
-  inject:['role'],
+  inject: ["role"],
   props: {
     course: {
       type: Object,
@@ -108,7 +122,7 @@ export default {
         },
       });
     },
-    editQuiz(quiz){
+    editQuiz(quiz) {
       this.$router.push({
         name: "quiz-edit",
         params: {
