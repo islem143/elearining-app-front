@@ -209,19 +209,21 @@ export default {
                     choices: question.choices,
                   })
                   .then((res) => {
-                    this.$toast.add({
-                      severity: "success",
-                      summary: "Questions were updated.",
+                    this.$toast
+                      .add({
+                        severity: "success",
+                        summary: "Questions were updated.",
 
-                      life: 3000,
-                    }).catch(err=>{
-                      this.$toast.add({
-                      severity: "danger",
-                      summary: "An Error occured.",
+                        life: 3000,
+                      })
+                      .catch((err) => {
+                        this.$toast.add({
+                          severity: "danger",
+                          summary: "An Error occured.",
 
-                      life: 3000,
-                    });
-                    });
+                          life: 3000,
+                        });
+                      });
                   });
               });
           }, i);
@@ -238,6 +240,12 @@ export default {
           this.$router.push({
             name: "quiz-edit",
             params: { courseId: this.courseId, quizId: quizId },
+          });
+          this.$toast.add({
+            severity: "success",
+            summary: "Quiz was created.",
+
+            life: 3000,
           });
         });
     },

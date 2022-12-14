@@ -37,7 +37,7 @@
         >
       </li>
       <li v-if="role=='teacher'">
-        <router-link :to="{ name: 'log-list' }">
+        <router-link :to="{ name: 'history-list' }">
           <p class="p-link mt-2 hover:bg-gray-300 p-2">History</p></router-link
         >
       </li>
