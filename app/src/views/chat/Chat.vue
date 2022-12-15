@@ -21,7 +21,7 @@ export default {
       console.log(res.data);
     });
 
-    window.Echo.join("chat").listen("MessageSent", (e) => {
+    window.Echo.private("chat").listen(".MessageSent", (e) => {
       console.log("yes", e);
       // this.messages.push({
       //   message: e.message.message,

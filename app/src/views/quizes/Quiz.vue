@@ -61,8 +61,8 @@ export default {
       quizDone: false,
       correctChoice: null,
       stats: {
-        duration: null,
-        totalPoints: null,
+        duration: 0,
+        totalPoints: 0,
       },
     };
   },

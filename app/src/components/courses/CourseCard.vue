@@ -43,7 +43,7 @@
         <h5>Learn:</h5>
       </div>
 
-      <p v-for="media in course.media">
+      <p v-for="media in course.media" :key="media.id">
         <i
           :class="
             icons[media.type] + ' mr-3 mt-2 border-1 p-1 surface-200 text-900'

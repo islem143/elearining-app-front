@@ -1,9 +1,25 @@
 <template>
-  <div class="grid" >
+  <div class="grid w-8 m-auto">
     <div class="col-12">
       <div class="card">
-        <h5>Modules</h5>
-        <DataView
+        <h3>Modules</h3>
+        <div class="flex">
+          <router-link v-if="role == 'teacher'" :to="{ name: 'module-create' }">
+            <Button
+              label="New Module"
+              icon="pi pi-plus"
+              class="p-button-success mr-2"
+              @click="openNew"
+            />
+          </router-link>
+        </div>
+        <module-cards
+          @edit-module="editModule"
+          @confirm-delete-module="confirmDeleteModule"
+          @go-to="goTo"
+          :modules="data"
+        />
+        <!-- <DataView
           :value="data"
           :layout="layout"
           :paginator="true"
@@ -14,15 +30,9 @@
           <template #header>
             <div class="grid grid-nogutter">
               <div class="col-6 text-left">
-                <!--   <Dropdown
-                  v-model="sortKey"
-                  :options="sortOptions"
-                  optionLabel="label"
-                  placeholder="Sort By Price"
-                  @change="onSortChange($event)"
-                /> -->
+               
                 <router-link
-                  v-if="role == 'teacher'"
+                  v-if="role == 'teacher'" 
                   :to="{ name: 'module-create' }"
                 >
                   <Button
@@ -50,7 +60,10 @@
                   :alt="slotProps.data.name"
                   class="my-4 md:my-0 w-9 md:w-10rem shadow-2 mr-5"
                 />
-                <div  @click="goTo(slotProps.data)"  class="flex-1 text-center md:text-left">
+                <div
+                  @click="goTo(slotProps.data)"
+                  class="flex-1 text-center md:text-left"
+                >
                   <div class="font-bold text-2xl">
                     {{ slotProps.data.title }}
                   </div>
@@ -76,24 +89,25 @@
           </template>
 
           <template #grid="slotProps">
-            <div class="col-12 md:col-3 cursor-pointer">
-              <div class="card m-3 border-1 surface-border">
+            <div class="col-12 md:col-3 cursor-pointer m-2">
+              <div class="card p-0 m-0 border-1 surface-border overflow-hidden">
                 <div
                   class="flex align-items-center justify-content-between"
                 ></div>
-                <div  @click="goTo(slotProps.data)" class="text-center">
+                <div @click="goTo(slotProps.data)" class="text-center">
                   <img
-                  @click="goTo(slotProps.data)"
-                  v-if="slotProps.data.img_url"
-                   
+                    @click="goTo(slotProps.data)"
+                    v-if="slotProps.data.img_url"
                     :src="'http://localhost:8081/images/' + src(slotProps.data)"
                     :alt="slotProps.data.name"
-                    class="w-9 shadow-2 my-3 mx-0"
+                    class="w-full shadow-2"
                   />
-                  <div class="text-2xl font-bold">
-                    {{ slotProps.data.title }}
+                  <div class="p-3">
+                    <div class="text-2xl font-bold">
+                      {{ slotProps.data.title }}
+                    </div>
+                    <div class="mb-3 mt-2">{{ slotProps.data.descprtion }}</div>
                   </div>
-                  <div class="mb-3 mt-2">{{ slotProps.data.descprtion }}</div>
                 </div>
                 <div class="flex align-items-center justify-content-center">
                   <Button
@@ -113,7 +127,7 @@
               </div>
             </div>
           </template>
-        </DataView>
+        </DataView> -->
         <Dialog
           v-model:visible="deleteModuleDialog"
           :style="{ width: '450px' }"
@@ -149,8 +163,12 @@
 
 <script>
 import axios from "../../http";
+import ModuleCards from "./ModuleCard.vue";
 export default {
   inject: ["role"],
+  components: {
+    ModuleCards,
+  },
   data() {
     return {
       selectedModule: null,
