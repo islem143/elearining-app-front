@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from "vue-router";
 import App from "../App.vue";
 import { hasToken, hasRoutes, getRoles, setHasRoutes } from "../utils/auth";
 const staticRoutes = [
+ 
   {
     path: "/login",
     name: "login",
@@ -147,6 +148,21 @@ const asyncRoutes = [
             },
           },
         ],
+      },
+    ],
+  },
+  {
+    path: "/chat",
+    component: App,
+
+    children: [
+      {
+        path: "",
+        name: "chat",
+        component: () => import("../views/chat/Chat.vue"),
+        meta: {
+          roles: ["super-admin", "teacher", "student"],
+        },
       },
     ],
   },

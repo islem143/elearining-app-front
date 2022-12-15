@@ -1,5 +1,5 @@
 <template>
-  <div class="grid">
+  <div class="grid" >
     <div class="col-12">
       <div class="card">
         <h5>Modules</h5>
@@ -44,12 +44,13 @@
                 class="flex flex-column md:flex-row align-items-center p-3 w-full"
               >
                 <img
+                  v-if="slotProps.data.img_url"
                   @click="goTo(slotProps.data)"
                   :src="'http://localhost:8081/images/' + src(slotProps.data)"
                   :alt="slotProps.data.name"
                   class="my-4 md:my-0 w-9 md:w-10rem shadow-2 mr-5"
                 />
-                <div class="flex-1 text-center md:text-left">
+                <div  @click="goTo(slotProps.data)"  class="flex-1 text-center md:text-left">
                   <div class="font-bold text-2xl">
                     {{ slotProps.data.title }}
                   </div>
@@ -80,9 +81,11 @@
                 <div
                   class="flex align-items-center justify-content-between"
                 ></div>
-                <div class="text-center">
+                <div  @click="goTo(slotProps.data)" class="text-center">
                   <img
-                    @click="goTo(slotProps.data)"
+                  @click="goTo(slotProps.data)"
+                  v-if="slotProps.data.img_url"
+                   
                     :src="'http://localhost:8081/images/' + src(slotProps.data)"
                     :alt="slotProps.data.name"
                     class="w-9 shadow-2 my-3 mx-0"
@@ -183,7 +186,6 @@ export default {
     },
     editModule(data) {
       if (this.role == "teacher") {
-        
         this.$router.push({
           name: "module-edit",
           params: { moduleId: data.id },

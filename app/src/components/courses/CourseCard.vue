@@ -1,37 +1,48 @@
 <template>
   <div
-    class="
-      pa-7
-      cursor-pointer
-      p-5
-      m-4
-      border-round
-      transition-all transition-duration-200
-      hover:bg-gray-100
-      shadow-4
-      hover:shadow-6
-    "
+    class="pa-7 cursor-pointer m-4 border-round transition-all transition-duration-200 hover:bg-gray-100 shadow-4 hover:shadow-6"
   >
-    <div>
-      <a href="" class="text-xl font-bold text-900">{{ course.title }}</a>
-      <p class="mt-2">Description: {{ course.description }}</p>
+    <div class="flex justify-content-between">
+      <div class="flex gap-2 align-items-center px-3 py-2">
+        <i class="pi pi-check-square"></i>
+        <h4>Learn</h4>
+      </div>
+      <div class="mt-2 p-3">
+        <Button
+          style="width: 150px"
+          v-if="role == 'teacher'"
+          label="Edit Course"
+          icon="pi pi-pencil"
+          class="p-button-rounded p-button-success mr-2"
+          @click="editCourse"
+        />
+        <Button
+          style="width: 150px"
+          v-if="role == 'teacher'"
+          label="Delete Course"
+          icon="pi pi-pencil"
+          class="p-button-rounded p-button-danger mr-2"
+          @click="deleteCourse"
+        />
+      </div>
     </div>
-    <div v-if="course.is_taken == false && role != 'teacher'">
+
+    <div class="flex px-5 pt-3">
+      <div>
+        <a href="" class="text-xl font-bold text-900">{{ course.title }}</a>
+        <p class="mt-2">Description: {{ course.description }}</p>
+      </div>
+      <div></div>
+    </div>
+
+    <div class="p-5" v-if="course.is_taken == false && role != 'teacher'">
       <Button @click="startCourse">Start the course</Button>
     </div>
-    <div v-else>
-      <div class="flex justify-content-between">
-        <div>
-          <Button
-            v-if="role == 'teacher'"
-            label="Edit Course"
-            icon="pi pi-pencil"
-            class="p-button-rounded p-button-success mr-2"
-            @click="editCourse"
-          />
-        </div>
+    <div v-else class="px-5 pb-3">
+      <div>
+        <h5>Learn:</h5>
       </div>
-      <h5>Learn:</h5>
+
       <p v-for="media in course.media">
         <i
           :class="
@@ -61,66 +72,35 @@
           Average atomic mass
         </a>
       </p>
-      <h5>Practise:</h5>
-      <div>
-        <div
-          v-if="course.quizzes.length != 0"
-          v-for="quiz in course.quizzes"
-          class="flex justify-content-between align-content-center mb-3"
-        >
-          <div class="align-self-center">
-            <p v-if="quiz.user_id">
-              <b>Title: </b>{{ quiz.title }}, <b> mark: {{ quiz.mark }}</b>
-              <b> time: {{ quiz.time }}</b>
-            </p>
 
-            <p v-else>
-              <b>Title: </b>{{ quiz.title }}, <b>Duration: </b>
-              {{ quiz.duration }} mn
-            </p>
-          </div>
-
-          <div class="flex gap-2">
-            <Button
-              v-if="role == 'student'"
-              class="text-sm"
-              @click="goToQuiz(quiz)"
-              :label="quiz.user_id ? 'See Result' : 'Start Quiz'"
-            />
-            <Button
-              class="text-sm"
-              v-if="role == 'teacher'"
-              @click="editQuiz(quiz)"
-              label="Edit Quiz"
-            />
-          </div>
-        </div>
-
-        <div v-else>
-          <p>This course has not a quiz.</p>
-        </div>
-        <Dialog :header="this.title" v-model:visible="visible">
-          <iframe
-            :src="'http://www.youtube.com/embed/' + this.url"
-            width="560"
-            height="315"
-            frameborder="0"
-            allowfullscreen
-          ></iframe>
-        </Dialog>
-      </div>
+      <Dialog class="p-2" :header="this.title" v-model:visible="visible">
+        <iframe
+          :src="'http://www.youtube.com/embed/' + this.url"
+          width="560"
+          height="315"
+          frameborder="0"
+          allowfullscreen
+        ></iframe>
+      </Dialog>
     </div>
   </div>
+  <CourseQuiz
+    @go-to-quiz="goToQuiz"
+    @edit-quiz="editQuiz"
+    @delete-quiz="deleteQuiz"
+    :quizzes="course.quizzes"
+    :course="course"
+  />
 </template>
 
 <script>
 import axios from "../../http";
-//import Dialogg from "./Dialog.vue";
+import CourseQuiz from "./CourseQuiz.vue";
 export default {
   name: "CourseCard",
   inject: ["role"],
   components: {
-    // Dialogg,
+    CourseQuiz,
   },
   props: {
     course: {
@@ -164,6 +144,13 @@ export default {
         },
       });
     },
+    deleteQuiz(quiz) {
+      axios
+        .delete("/api/course/" + this.course.id + "/quiz/" + quiz.id)
+        .then((res) => {
+          console.log(res);
+        });
+    },
     courseDetail() {
       this.$router.push({
         name: "course-detail",
@@ -189,6 +176,26 @@ export default {
         )
         .then((res) => {
           console.log(res);
+        })
+        .catch((err) => {
+          this.$toast.add({
+            severity: "warn",
+            summary: err.response.data.message,
+
+            life: 3000,
+          });
+        });
+    },
+    deleteCourse() {
+      axios
+        .delete(
+          "/api/module/" +
+            this.$route.params.moduleId +
+            "/course/" +
+            this.course.id
+        )
+        .then((res) => {
+          console.log("yes");
         });
     },
     editCourse() {

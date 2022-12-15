@@ -2,7 +2,9 @@
   <div
     :class="
       'w-9 card py-4 px-6 cursor-pointer hover:surface-400 ' +
-      selectedChoice
+      classes +
+      ' ' +
+      correctChoice
     "
     @click="$emit('selectAnswer', choice)"
   >
@@ -14,6 +16,11 @@
 
 <script>
 export default {
+  data() {
+    return {
+      classes: null,
+    };
+  },
   props: {
     choice: {
       type: Object,
@@ -21,12 +28,37 @@ export default {
     selectedChoice: {
       type: Object,
     },
+    correctChoice: {
+      type: Object,
+    },
+  },
+
+  watch: {
+    selectedChoice: {
+      handler(val) {
+        this.classes =
+          this.selectedChoice && this.selectedChoice.id == this.choice.id
+            ? "surface-300 "
+            : "bg-white";
+      },
+      immediate: true,
+    },
   },
   computed: {
-    selectedChoice() {
-      return this.selectedChoice && this.selectedChoice.id == this.choice.id
-        ? "surface-300 "
-        : "bg-white";
+    correctChoice() {
+      if (this.correctChoice && this.correctChoice.id == this.choice.id) {
+        this.classes = null;
+        return "bg-green-500";
+      } else if (
+        this.correctChoice &&
+        this.correctChoice.id != this.choice.id &&
+        this.selectedChoice.id == this.choice.id
+      ) {
+        this.classes = null;
+        return "bg-red-500";
+      } else {
+        return "";
+      }
     },
   },
   name: "Choice",

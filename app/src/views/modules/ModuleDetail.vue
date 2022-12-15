@@ -6,7 +6,10 @@
     <div class="p-5">
       <div class="flex justify-content-between mb-5">
         <h3>Courses</h3>
-        <router-link   v-if="role=='teacher'" :to="{ name: 'course-create', params: { moduleId: id } }">
+        <router-link
+          v-if="role == 'teacher'"
+          :to="{ name: 'course-create', params: { moduleId: id } }"
+        >
           <Button
             style="width: 145px"
             icon="pi pi-plus"
@@ -16,7 +19,7 @@
         </router-link>
       </div>
 
-      <CouresListVue :courses="courses"  />
+      <CouresListVue :courses="courses" />
     </div>
   </div>
 </template>
@@ -27,7 +30,7 @@ import CouresListVue from "../../components/courses/CouresList.vue";
 import axios from "../../http";
 
 export default {
-  inject:['role'],
+  inject: ["role"],
   name: "ModuleDetail",
   components: {
     ModuleInfoVue,
@@ -44,6 +47,19 @@ export default {
       courses: [],
     };
   },
+  beforeRouteUpdate(to, from) {
+    let id = this.$route.params.moduleId;
+    this.id = id;
+    axios.get("/api/module/" + id).then((res) => {
+      this.info.title = res.data.title;
+      this.info.description = res.data.descprtion;
+      this.info.img_url = res.data.img_url;
+
+      axios.get("/api/module/" + id + "/course").then((res) => {
+        this.courses = res.data;
+      });
+    });
+  },
   created() {
     let id = this.$route.params.moduleId;
     this.id = id;
@@ -52,10 +68,9 @@ export default {
       this.info.description = res.data.descprtion;
       this.info.img_url = res.data.img_url;
 
-      axios.get("/api/module/" +id + "/course").then((res) => {
+      axios.get("/api/module/" + id + "/course").then((res) => {
         this.courses = res.data;
       });
-      
     });
   },
 };

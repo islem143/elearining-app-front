@@ -5,7 +5,11 @@
       class="py-1 px-3 cursor-pointer font-bold text-900 hover:surface-400 mr-2 mb-3 custom-chip"
     />
 
-    <CourseCardVue v-for="course in courses" :course="course" />
+    <CourseCardVue
+      v-for="course in courses"
+      :key="course.id"
+      :course="course"
+    />
   </div>
 </template>
 
@@ -19,7 +23,7 @@ export default {
       type: Array,
     },
   },
- 
+
   created() {},
   components: {
     CourseCardVue,

@@ -1,5 +1,11 @@
 <template>
-  <Choice :selectedChoice="selectedChoice" @selectAnswer="$emit('selectAnswer',choice)" v-for="choice in choices" :choice="choice"/>
+  <Choice
+    :selectedChoice="selectedChoice"
+    :correctChoice="correctChoice"
+    @selectAnswer="$emit('selectAnswer', choice)"
+    v-for="choice in choices"
+    :choice="choice"
+  />
 </template>
 
 <script>
@@ -13,7 +19,11 @@ export default {
     selectedChoice: {
       type: Object,
     },
+    correctChoice: {
+      type: Object,
+    },
   },
+
   components: {
     Choice,
   },

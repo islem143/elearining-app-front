@@ -7,12 +7,18 @@
       class="flex w-8 mx-auto flex-column mt-8 justify-content-center align-items-center"
     >
       <div class="p-card p-3 mb-3 align-self-end">
-        Time:  
-         {{ parseInt(duration / 1000 / 60) + "mn" }}
+        Time:
+        {{ parseInt(duration / 1000 / 60) + "mn" }}
         {{ ((duration / 1000) % 60) + "s" }}
       </div>
       <Question :question="questions[currentIndex]" />
-      <Choices @selectAnswer="selectAnswer" :selectedChoice="answers[currentIndex]" :choices="questions[currentIndex].choices" />
+      <Choices
+        @selectAnswer="selectAnswer"
+        :selectedChoice="answers[currentIndex]"
+        :choices="questions[currentIndex].choices"
+        :correctChoice="correctChoice"
+      />
+      <Button class="align-self-end" label="Confirm" @click="confirmChoice" />
       <Button
         class="align-self-end"
         :label="currentIndex < questions.length - 1 ? 'Next' : 'Finish Quiz'"
@@ -53,6 +59,7 @@ export default {
       startDuration: null,
       timerId: null,
       quizDone: false,
+      correctChoice: null,
       stats: {
         duration: null,
         totalPoints: null,
@@ -131,12 +138,21 @@ export default {
       this.stats.duration = this.startDuration - this.duration;
     },
     selectAnswer(choice) {
-      this.answers[this.currentIndex] = choice;
+      if (!this.correctChoice) {
+        this.answers[this.currentIndex] = choice;
+      }
+    },
+    confirmChoice() {
+      let isCorrect = this.questions[this.currentIndex].choices.filter(
+        (c) => c.is_correct
+      )[0];
+      this.correctChoice = isCorrect;
     },
     nextQuestion() {
       if (this.answers[this.currentIndex]) {
+        this.correctChoice = false;
         this.showError = false;
-        console.log(this.answers[this.currentIndex]);
+        // console.log(this.answers[this.currentIndex]);
 
         axios
           .put(

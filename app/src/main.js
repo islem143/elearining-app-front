@@ -1,3 +1,35 @@
+import Echo from "laravel-echo";
+import Pusher from "pusher-js";
+import axios from "./http";
+window.Pusher = Pusher;
+
+window.Echo = new Echo({
+  broadcaster: "pusher",
+  key: "khjkjhk",
+
+  wsHost: "localhost",
+  wsPort: 6001,
+  forceTLS: false,
+  disableStats: true,
+  authorizer: (channel, options) => {
+    return {
+      authorize: (socketId, callback) => {
+        axios
+          .post("/broadcasting/auth", {
+            socket_id: socketId,
+            channel_name: channel.name,
+          })
+          .then((response) => {
+            callback(false, response.data);
+          })
+          .catch((error) => {
+            callback(true, error);
+          });
+      },
+    };
+  },
+});
+
 import "primevue/resources/primevue.min.css";
 import "primeflex/primeflex.css";
 import "primeicons/primeicons.css";

@@ -1,5 +1,5 @@
 <template>
-  <ModuleListVue />
+  <ModuleListVue   />
 </template>
 
 <script>

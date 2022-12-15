@@ -124,9 +124,12 @@ export default {
           { courseId: courseId },
           "/api/media",
           (event) => {
-            //   this.progressInfos[idx].percentage = Math.round(
-            //     (100 * event.loaded) / event.total
-            //   );
+            this.$toast.add({
+              severity: "success",
+              summary: "Files were uploaded.",
+
+              life: 3000,
+            });
           }
         );
       }
@@ -162,7 +165,7 @@ export default {
                 return id;
               } else {
                 this.$router.push({
-                  name: "course-edit",
+                  name: "course-detail",
                   params: { moduleId: this.moduleId, courseId: id },
                 });
               }
