@@ -159,11 +159,12 @@
       </div>
     </div>
   </div>
+  
 </template>
 
 <script>
 import axios from "../../http";
-import ModuleCards from "./ModuleCard.vue";
+import ModuleCards from "./ModulesCard.vue";
 export default {
   inject: ["role"],
   components: {
@@ -185,9 +186,15 @@ export default {
     };
   },
 
-  async created() {
-    await axios.get("/api/module").then((res) => {
+  created() {
+    axios.get("/api/module").then((res) => {
       this.data = res.data;
+      this.data.forEach((d) => {
+        axios.get("/api/module/" + d.id + "/completedCourses").then((res) => {
+          d.totalCourses = res.data.totalCourse;
+          d.completedCourses = res.data.completedCourses;
+        });
+      });
     });
   },
 

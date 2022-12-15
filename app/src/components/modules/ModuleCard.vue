@@ -1,47 +1,56 @@
 <template>
-  <div v-for="module in modules" :key="module.id">
-    <Card class="my-3">
-      <template #title>
-        <div class="flex justify-content-between">
-          <h4>{{ module.title }}</h4>
-          <div>
-            <Button
-              icon="pi pi-pencil"
-              class="p-button-rounded p-button-success mr-2"
-              @click="$emit('edit-module', module)"
-              v-if="role == 'teacher'"
-            />
-
-            <Button
-              icon="pi pi-trash"
-              class="p-button-rounded p-button-danger"
-              @click="$emit('confirm-delete-module', module)"
-              v-if="role == 'teacher'"
-            />
-          </div>
-        </div>
-      </template>
-      <template #content>
-        {{ module.descprtion }}
-        <hr />
-        <a
-          class="block mt-2 text-lg hover:underline cursor-pointer"
-          v-for="course in module.courses"
-          :key="course.id"
-          >{{ course.title }}</a
+  <Card class="my-3">
+    <template #title>
+      <div class="flex justify-content-between">
+        <h4>{{ module.title }}</h4>
+        <ProgressBar
+          class="w-3 text-center"
+          :value="(module.completedCourses * 100) / module.totalCourses"
         >
-      </template>
-      <template #footer>
-        <Button @click="$emit('go-to', module)" label="Get Started" />
-      </template>
-    </Card>
-  </div>
+          
+        </ProgressBar>
+        <div v-if="role == 'teacher'">
+          <Button
+            icon="pi pi-pencil"
+            class="p-button-rounded p-button-success mr-2"
+            @click="$emit('edit-module', module)"
+            v-if="role == 'teacher'"
+          />
+
+          <Button
+            icon="pi pi-trash"
+            class="p-button-rounded p-button-danger"
+            @click="$emit('confirm-delete-module', module)"
+            v-if="role == 'teacher'"
+          />
+        </div>
+      </div>
+    </template>
+    <template #content>
+      {{ module.descprtion }}
+      <hr />
+      <a
+        class="block mt-2 text-lg hover:underline cursor-pointer"
+        v-for="course in module.courses"
+        :key="course.id"
+        >{{ course.title }}</a
+      >
+    </template>
+    <template #footer>
+      <Button @click="$emit('go-to', module)" label="Get Started" />
+    </template>
+  </Card>
 </template>
 
 <script>
 export default {
   name: "ModuleCard",
   inject: ["role"],
-  props: ["modules"],
+  props: ["module"],
+  data() {
+    return {
+      value: 5,
+    };
+  },
 };
 </script>
