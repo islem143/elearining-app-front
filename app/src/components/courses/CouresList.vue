@@ -28,6 +28,9 @@ export default {
   components: {
     CourseCardVue,
   },
+  methods(){
+    
+  }
 };
 </script>
 

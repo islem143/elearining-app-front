@@ -20,6 +20,10 @@
           @add-media-field="addMediaField"
           :media="media"
         />
+        <hr />
+        <h4>Add Course Content</h4>
+
+        <ContentForm @add-content="addContent" />
       </div>
       <!-- <ul>
         <li v-for="media of mediaList">
@@ -37,12 +41,14 @@ import useVuelidate from "@vuelidate/core";
 import axios from "../../http";
 import UploadService from "../../services/UploadService";
 import QuizForm from "../quizes/QuizForm.vue";
+import ContentForm from "./ContentForm.vue";
 
 export default {
   name: "CourseForm",
   components: {
     UploadMedia,
     QuizForm,
+    ContentForm,
   },
   created() {
     let moduleId = parseInt(this.$route.params.moduleId);
@@ -87,6 +93,20 @@ export default {
     };
   },
   methods: {
+    addContent(content) {
+      if (this.courseId) {
+        axios
+          .post(
+            "/api/module/" +
+              this.moduleId +
+              "/course/" +
+              this.courseId +
+              "/content",
+            { content }
+          )
+          .then((res) => {console.log("yes");});
+      }
+    },
     removeMediaFeild(index) {
       this.media.splice(index, 1);
     },

@@ -34,7 +34,14 @@
       </div>
       <div></div>
     </div>
-
+    <!-- <p v-for="content in course.courses_content" :key="content.id">
+      <a
+        class="text-900 text-lg hover:underline"
+        @click="openDialogContent(content)"
+      >
+        Average atomic mass
+      </a>
+    </p> -->
     <div class="p-5" v-if="course.is_taken == false && role != 'teacher'">
       <Button @click="startCourse">Start the course</Button>
     </div>
@@ -72,6 +79,21 @@
           Average atomic mass
         </a>
       </p>
+      <p>
+        <i
+          :class="
+            'pi pi-video' + ' mr-3 mt-2 border-1 p-1 surface-200 text-900'
+          "
+          style="font-size: 1rem"
+        >
+        </i>
+        <a
+          class="text-900 text-lg hover:underline"
+          @click="openDialog('YsqoF3hqdkg', 'Average atomic mass')"
+        >
+          Average atomic mass
+        </a>
+      </p>
 
       <Dialog class="p-2" :header="this.title" v-model:visible="visible">
         <iframe
@@ -81,6 +103,13 @@
           frameborder="0"
           allowfullscreen
         ></iframe>
+      </Dialog>
+      <Dialog
+        class="p-2 w-9"
+        :header="this.title"
+        v-model:visible="visibleContent"
+      >
+        <div v-html="html"></div>
       </Dialog>
     </div>
   </div>
@@ -96,6 +125,7 @@
 <script>
 import axios from "../../http";
 import CourseQuiz from "./CourseQuiz.vue";
+import { QuillDeltaToHtmlConverter } from "quill-delta-to-html";
 export default {
   name: "CourseCard",
   inject: ["role"],
@@ -115,7 +145,10 @@ export default {
       quizzes: [],
       url: "",
       title: "",
+      content: "",
+      visibleContent: false,
       visible: false,
+      html: "",
       icons: {
         video: "pi pi-video",
         image: "pi pi-image",
@@ -159,6 +192,16 @@ export default {
           courseId: this.course.id,
         },
       });
+    },
+    openDialogContent(content) {
+      this.content = JSON.parse(content.content);
+
+      this.visibleContent = true;
+      var converter = new QuillDeltaToHtmlConverter(this.content.ops, {});
+
+      var html = converter.convert();
+      console.log(html);
+      this.html = html;
     },
     openDialog(url, title) {
       this.visible = true;
