@@ -32,6 +32,8 @@ export default {
   data() {
     return {
       id: null,
+      courseId: null,
+      moduleId: null,
       info: {
         title: "",
         description: "",
@@ -43,14 +45,20 @@ export default {
   created() {
     let moduleId = this.$route.params.moduleId;
     let courseId = this.$route.params.courseId;
-
-    axios.get("/api/module/" + moduleId + "/course/" + courseId).then((res) => {
-      this.info = res.data;
-      axios.get("/api/media/" + courseId).then((res) => {
-        this.attachments = res.data;
-      });
-     
-    });
+    this.courseId = courseId;
+    this.moduleId = moduleId;
+  },
+  methods: {
+    getCourse() {
+      axios
+        .get("/api/module/" + this.moduleId + "/course/" + this.courseId)
+        .then((res) => {
+          this.info = res.data;
+          axios.get("/api/media/" + courseId).then((res) => {
+            this.attachments = res.data;
+          });
+        });
+    },
   },
 };
 </script>

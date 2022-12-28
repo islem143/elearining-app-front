@@ -6,6 +6,7 @@
     />
 
     <CourseCardVue
+      @get-course="$emit('get-course', course)"
       v-for="course in courses"
       :key="course.id"
       :course="course"
@@ -28,9 +29,7 @@ export default {
   components: {
     CourseCardVue,
   },
-  methods(){
-    
-  }
+  methods() {},
 };
 </script>
 

@@ -113,11 +113,13 @@
       </Dialog>
     </div>
   </div>
+
   <CourseQuiz
+    v-if="role != 'teacher' && course.is_taken == true"
     @go-to-quiz="goToQuiz"
     @edit-quiz="editQuiz"
     @delete-quiz="deleteQuiz"
-    :quizzes="course.quizzes"
+    :quiz="course.quiz"
     :course="course"
   />
 </template>
@@ -219,8 +221,16 @@ export default {
         )
         .then((res) => {
           console.log(res);
+          this.$emit("get-course", this.course);
+          this.$toast.add({
+            severity: "success",
+            summary: res.data.message,
+
+            life: 3000,
+          });
         })
         .catch((err) => {
+   
           this.$toast.add({
             severity: "warn",
             summary: err.response.data.message,

@@ -19,7 +19,11 @@
         </router-link>
       </div>
 
-      <CouresListVue :courses="courses" />
+      <CouresListVue
+        @get-course="getCourse"
+        @get-courses="getCourses"
+        :courses="courses"
+      />
     </div>
   </div>
 </template>
@@ -60,18 +64,34 @@ export default {
       });
     });
   },
-  created() {
+  async created() {
     let id = this.$route.params.moduleId;
     this.id = id;
-    axios.get("/api/module/" + id).then((res) => {
-      this.info.title = res.data.title;
-      this.info.description = res.data.descprtion;
-      this.info.img_url = res.data.img_url;
-
-      axios.get("/api/module/" + id + "/course").then((res) => {
+    await this.getModule();
+    this.getCourses();
+  },
+  methods: {
+    getCourses() {
+      axios.get("/api/module/" + this.id + "/course").then((res) => {
         this.courses = res.data;
       });
-    });
+    },
+    getCourse(course) {
+      axios
+        .get("/api/module/" + this.id + "/course/" + course.id)
+        .then((res) => {
+          console.log(res);
+          let index = this.courses.findIndex((c) => c.id == course.id);
+          this.courses.splice(index, 1, res.data);
+        });
+    },
+    async getModule() {
+      return axios.get("/api/module/" + this.id).then((res) => {
+        this.info.title = res.data.title;
+        this.info.description = res.data.descprtion;
+        this.info.img_url = res.data.img_url;
+      });
+    },
   },
 };
 </script>

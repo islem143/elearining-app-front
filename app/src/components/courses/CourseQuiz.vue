@@ -1,7 +1,5 @@
-<template v-if="(quizzes.length != 0 && course.is_taken) || role == 'teacher'">
+<template >
   <div
-    v-for="quiz in quizzes"
-    :key="quiz.id"
     class="pa-7 w-5 cursor-pointer py-2 px-4 m-4 border-round transition-all transition-duration-200 hover:bg-gray-100 shadow-4 hover:shadow-6"
   >
     <div class="flex gap-2 align-items-center">
@@ -54,7 +52,7 @@
 <script>
 export default {
   name: "CourseQuiz",
-  props: ["quizzes", "course"],
+  props: ["quiz", "course"],
   inject: ["role"],
 };
 </script>
