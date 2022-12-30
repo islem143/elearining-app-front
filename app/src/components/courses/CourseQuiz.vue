@@ -6,9 +6,8 @@
       <i class="pi pi-check-square"></i>
       <h4>Quiz</h4>
     </div>
-
     <div class="p-2">
-      <div v-if="quiz.user_id">
+      <div v-if="role!='teacher' && quiz.user_id">
         <p>
           <b>Title: </b>{{ quiz.title }}, <b> mark: {{ quiz.mark }}</b>
         </p>

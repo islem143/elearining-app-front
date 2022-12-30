@@ -64,36 +64,6 @@
           >{{ media.name }}</a
         >
       </p>
-      <p>
-        <i
-          :class="
-            'pi pi-video' + ' mr-3 mt-2 border-1 p-1 surface-200 text-900'
-          "
-          style="font-size: 1rem"
-        >
-        </i>
-        <a
-          class="text-900 text-lg hover:underline"
-          @click="openDialog('YsqoF3hqdkg', 'Average atomic mass')"
-        >
-          Average atomic mass
-        </a>
-      </p>
-      <p>
-        <i
-          :class="
-            'pi pi-video' + ' mr-3 mt-2 border-1 p-1 surface-200 text-900'
-          "
-          style="font-size: 1rem"
-        >
-        </i>
-        <a
-          class="text-900 text-lg hover:underline"
-          @click="openDialog('YsqoF3hqdkg', 'Average atomic mass')"
-        >
-          Average atomic mass
-        </a>
-      </p>
 
       <Dialog class="p-2" :header="this.title" v-model:visible="visible">
         <iframe
@@ -115,7 +85,10 @@
   </div>
 
   <CourseQuiz
-    v-if="role != 'teacher' && course.is_taken == true"
+    v-if="
+      (role == 'teacher' && course.quiz) ||
+      (role != 'teacher' && course.is_taken == true && course.quiz)
+    "
     @go-to-quiz="goToQuiz"
     @edit-quiz="editQuiz"
     @delete-quiz="deleteQuiz"
@@ -230,7 +203,6 @@ export default {
           });
         })
         .catch((err) => {
-   
           this.$toast.add({
             severity: "warn",
             summary: err.response.data.message,

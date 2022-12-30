@@ -4,10 +4,10 @@
       <div class="flex justify-content-between">
         <h4>{{ module.title }}</h4>
         <ProgressBar
+          v-if="role == 'student'"
           class="w-3 text-center"
           :value="(module.completedCourses * 100) / module.totalCourses"
         >
-          
         </ProgressBar>
         <div v-if="role == 'teacher'">
           <Button
@@ -47,10 +47,5 @@ export default {
   name: "ModuleCard",
   inject: ["role"],
   props: ["module"],
-  data() {
-    return {
-      value: 5,
-    };
-  },
 };
 </script>

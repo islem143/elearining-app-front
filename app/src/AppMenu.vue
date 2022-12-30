@@ -4,7 +4,7 @@
     <div class="p-2">
       <h4 class="mb-5">Modules</h4>
 
-      <div v-for="module in modules">
+      <!-- <div v-for="module in modules">
         <Router-link
           :to="{ name: 'module-detail', params: { moduleId: module.id } }"
         >
@@ -12,7 +12,7 @@
         </Router-link>
 
         <hr />
-      </div>
+      </div> -->
     </div>
   </div>
 </template>
@@ -30,9 +30,9 @@ export default {
     model: Array,
   },
   async created() {
-    await axios.get("/api/module").then((res) => {
-      this.modules = res.data;
-    });
+    // await axios.get("/api/module").then((res) => {
+    //   this.modules = res.data;
+    // });
   },
   methods: {
     moduleDetail(module) {

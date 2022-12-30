@@ -13,6 +13,25 @@
           <InputText v-model="info.description" type="text" />
         </div>
         <Button class="mt-5" @click="submit" label="Submit" />
+        <h4>Media:</h4>
+        <div class="mt-2">
+          <div
+            v-for="m in media"
+            :key="m.id"
+            class="flex justify-content-between align-items-center p-card mb-2 p-2"
+          >
+            <a class="block" :href="'http://localhost:8081/' + m.url">
+              {{ m.name }}
+            </a>
+
+            <Button
+              icon="pi pi-trash"
+              class="p-button-rounded p-button-danger"
+              @click="deleteMedia(m)"
+            />
+          </div>
+        </div>
+        <p v-if="media.length == 0">There are no media for this course.</p>
         <UploadMedia
           up
           @upload-files="upload"
@@ -20,10 +39,10 @@
           @add-media-field="addMediaField"
           :media="media"
         />
-        <hr />
-        <h4>Add Course Content</h4>
+      
+        <!-- <h4>Add Course Content</h4> -->
 
-        <ContentForm @add-content="addContent" />
+        <!-- <ContentForm @add-content="addContent" /> -->
       </div>
       <!-- <ul>
         <li v-for="media of mediaList">
@@ -41,14 +60,15 @@ import useVuelidate from "@vuelidate/core";
 import axios from "../../http";
 import UploadService from "../../services/UploadService";
 import QuizForm from "../quizes/QuizForm.vue";
-import ContentForm from "./ContentForm.vue";
+//import ContentForm from "./ContentForm.vue";
 
 export default {
   name: "CourseForm",
+
   components: {
     UploadMedia,
     QuizForm,
-    ContentForm,
+   // ContentForm,
   },
   created() {
     let moduleId = parseInt(this.$route.params.moduleId);
@@ -61,10 +81,8 @@ export default {
         .then((res) => {
           this.info.title = res.data.title;
           this.info.description = res.data.description;
+          this.media = res.data.media;
         });
-      axios.get("/api/media/" + this.courseId).then((res) => {
-        this.mediaList = res.data;
-      });
     }
   },
   setup() {
@@ -93,6 +111,18 @@ export default {
     };
   },
   methods: {
+    async deleteMedia(media) {
+      let res = await axios.delete("/api/media/" + media.id);
+      let index = this.media.findIndex((m) => m.id == media.id);
+      this.media.splice(index, 1);
+      console.log(res);
+      this.$toast.add({
+        severity: "success",
+        summary: res.data.message,
+
+        life: 3000,
+      });
+    },
     addContent(content) {
       if (this.courseId) {
         axios
@@ -104,12 +134,15 @@ export default {
               "/content",
             { content }
           )
-          .then((res) => {console.log("yes");});
+          .then((res) => {
+            console.log("yes");
+          });
       }
     },
     removeMediaFeild(index) {
       this.media.splice(index, 1);
     },
+
     createQuiz() {
       if (!this.courseId) {
         this.$toast.add({
@@ -137,9 +170,13 @@ export default {
       }
       return errors;
     },
-    uploadFiles(selectedFiles, courseId) {
+    async getMedia() {
+      let res = await axios.get("/api/media/" + parseInt(this.courseId));
+      this.media = res.data;
+    },
+    async uploadFiles(selectedFiles, courseId) {
       for (const file of selectedFiles) {
-        UploadService.upload(
+        await UploadService.upload(
           file,
           { courseId: courseId },
           "/api/media",
@@ -159,7 +196,9 @@ export default {
       if (!courseId) {
         courseId = await this.submit(true);
       }
-      this.uploadFiles(selectedFiles, courseId);
+      await this.uploadFiles(selectedFiles, courseId);
+
+      this.getMedia();
     },
     async submit(e, withUpload) {
       const isFormCorrect = await this.v$.$validate();

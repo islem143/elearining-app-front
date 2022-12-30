@@ -1,54 +1,59 @@
 <template>
-  <div class="grid w-8 m-auto">
-    <div class="col-12">
-      <div class="card">
-        <h3>Modules</h3>
-        <div class="flex">
-          <router-link v-if="role == 'teacher'" :to="{ name: 'module-create' }">
-            <Button
-              label="New Module"
-              icon="pi pi-plus"
-              class="p-button-success mr-2"
-              @click="openNew"
-            />
-          </router-link>
+  <div class="col-12">
+    <div class="card">
+      <h3>Modules</h3>
+      <div class="flex align-items-center">
+        <router-link v-if="role == 'teacher'" :to="{ name: 'module-create' }">
+          <Button
+            label="New Module"
+            icon="pi pi-plus"
+            class="p-button-success mr-2"
+            @click="openNew"
+          />
+        </router-link>
+        <div class="p-input-icon-right col-4">
+          <i class="pi pi-search" />
+          <InputText
+            type="text"
+            class="w-full"
+            v-model="search"
+            placeholder="Search"
+            @input="getModules"
+          />
         </div>
-        <module-cards
-          @edit-module="editModule"
-          @confirm-delete-module="confirmDeleteModule"
-          @go-to="goTo"
-          :modules="data"
-        />
-
-        <Dialog
-          v-model:visible="deleteModuleDialog"
-          :style="{ width: '450px' }"
-          header="Confirm"
-          :modal="true"
-        >
-          <div class="confirmation-content">
-            <i
-              class="pi pi-exclamation-triangle mr-3"
-              style="font-size: 2rem"
-            />
-            <span>Are you sure you want to delete the selected module?</span>
-          </div>
-          <template #footer>
-            <Button
-              label="No"
-              icon="pi pi-times"
-              class="p-button-text"
-              @click="deleteModuleDialog = false"
-            />
-            <Button
-              label="Yes"
-              icon="pi pi-check"
-              class="p-button-text"
-              @click="deleteModule"
-            />
-          </template>
-        </Dialog>
       </div>
+      <module-cards
+        @edit-module="editModule"
+        @confirm-delete-module="confirmDeleteModule"
+        @go-to="goTo"
+        :modules="data"
+      />
+
+      <Dialog
+        v-model:visible="deleteModuleDialog"
+        :style="{ width: '450px' }"
+        header="Confirm"
+        :modal="true"
+      >
+        <div class="confirmation-content">
+          <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem" />
+          <span>Are you sure you want to delete the selected module?</span>
+        </div>
+        <template #footer>
+          <Button
+            label="No"
+            icon="pi pi-times"
+            class="p-button-text"
+            @click="deleteModuleDialog = false"
+          />
+          <Button
+            label="Yes"
+            icon="pi pi-check"
+            class="p-button-text"
+            @click="deleteModule"
+          />
+        </template>
+      </Dialog>
     </div>
   </div>
 </template>
@@ -66,6 +71,7 @@ export default {
       selectedModule: null,
       deleteModuleDialog: false,
       data: [],
+      search: "",
       layout: "grid",
       sortKey: null,
       sortOrder: null,
@@ -78,18 +84,26 @@ export default {
   },
 
   created() {
-    axios.get("/api/module").then((res) => {
-      this.data = res.data;
-      this.data.forEach((d) => {
-        axios.get("/api/module/" + d.id + "/completedCourses").then((res) => {
-          d.totalCourses = res.data.totalCourse;
-          d.completedCourses = res.data.completedCourses;
-        });
-      });
-    });
+    this.getModules();
   },
 
   methods: {
+    getModules() {
+      let params = { title: this.search };
+      axios.get("/api/module", { params }).then((res) => {
+        this.data = res.data;
+        if (this.role == "student") {
+          this.data.forEach((d) => {
+            axios
+              .get("/api/module/" + d.id + "/completedCourses")
+              .then((res) => {
+                d.totalCourses = res.data.totalCourse;
+                d.completedCourses = res.data.completedCourses;
+              });
+          });
+        }
+      });
+    },
     src(info) {
       console.log(info);
       return info.img_url.split("/")[2];
