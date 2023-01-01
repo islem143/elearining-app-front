@@ -37,7 +37,7 @@
       >
     </template>
     <template #footer>
-      <Button @click="$emit('go-to', module)" label="Get Started" />
+      <Button @click="$emit('go-to', module)" :label="role=='student'?'Get Started':'Edit Courses'" />
     </template>
   </Card>
 </template>

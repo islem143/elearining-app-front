@@ -22,6 +22,7 @@
           />
         </div>
       </div>
+      <p class="mt-4 text-2xl" v-if="data.length == 0 && search">No match found for "{{ search }}".</p>
       <module-cards
         @edit-module="editModule"
         @confirm-delete-module="confirmDeleteModule"

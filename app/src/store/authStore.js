@@ -17,6 +17,9 @@ const authStore = {
     isAuth(state) {
       return !!state.user.token;
     },
+    getUserId(state) {
+      return state.user.data.id;
+    },
   },
   mutations: {
     setUser(state, user) {
