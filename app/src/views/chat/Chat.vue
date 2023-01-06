@@ -1,8 +1,8 @@
 <template>
   <div>
     <div class="grid">
-      <Users @select-user="selectUser" class="col-2" :users="users" />
-      <div class="col-10">
+      <Users @select-user="selectUser" class="md:col-2 col-12" :users="users" :selectedUserId="receiver.id" />
+      <div class="md:col-10 col-12">
         <Messages :messages="messages" :userId="userId" />
 
         <div class="flex justify-content-end">
@@ -31,7 +31,7 @@ export default {
       messages: [],
       message: "",
       userId: null,
-      receiver: null,
+      receiver: 0,
     };
   },
   watch: {
@@ -76,6 +76,7 @@ export default {
         .then((res) => {
           this.messages.push({ message: this.message, user_id: this.userId });
           console.log(res.data);
+          this.message="";
         });
     },
   },

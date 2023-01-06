@@ -36,6 +36,11 @@
           <p class="p-link mt-2 hover:bg-gray-300 p-2">Modules</p></router-link
         >
       </li>
+      <li>
+        <router-link :to="{ name: 'chat' }">
+          <p class="p-link mt-2 hover:bg-gray-300 p-2">Chat</p></router-link
+        >
+      </li>
       <li v-if="role=='teacher'">
         <router-link :to="{ name: 'history-list' }">
           <p class="p-link mt-2 hover:bg-gray-300 p-2">History</p></router-link

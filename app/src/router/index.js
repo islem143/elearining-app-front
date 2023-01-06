@@ -188,6 +188,21 @@ const asyncRoutes = [
       },
     ],
   },
+  {
+    path: "/profile",
+    component: App,
+
+    children: [
+      {
+        path: "",
+        name: "profile",
+        component: () => import("../views/profile/Profile.vue"),
+        meta: {
+          roles: ["super-admin", "student", "teacher"],
+        },
+      },
+    ],
+  },
 
   { path: "/:pathMatch(.*)", redirect: "/404", hidden: true },
 ];
