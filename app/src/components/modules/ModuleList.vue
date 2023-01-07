@@ -1,6 +1,6 @@
 <template>
-  <div class="col-12">
-    <div class="card">
+  <div class="col-12 ">
+    <div class="card ">
       <h3>Modules</h3>
       <div class="flex align-items-center">
         <router-link v-if="role == 'teacher'" :to="{ name: 'module-create' }">

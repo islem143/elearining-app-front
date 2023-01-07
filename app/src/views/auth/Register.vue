@@ -38,6 +38,7 @@
               placeholder="Name"
               style="padding: 1rem"
             />
+            <p class="p-error">{{ nameError }}</p>
             <label for="email1" class="block text-900 text-xl font-medium mb-2"
               >Email</label
             >
@@ -49,7 +50,7 @@
               placeholder="Email"
               style="padding: 1rem"
             />
-
+            <p class="p-error">{{ emailError }}</p>
             <label
               for="password1"
               class="block text-900 font-medium text-xl mb-2"
@@ -64,6 +65,7 @@
               inputClass="w-full"
               inputStyle="padding:1rem"
             ></Password>
+            <p class="p-error">{{ passwordError }}</p>
             <label
               for="password2"
               class="block text-900 font-medium text-xl mb-2"
@@ -118,7 +120,12 @@ export default {
         email: "",
         password: "",
         password_confirmation: "",
+
+        error: "",
       },
+      nameError: "",
+      emailError: "",
+      passwordError: "",
     };
   },
   computed: {
@@ -128,17 +135,28 @@ export default {
     },
   },
   methods: {
+    clearErrors() {
+      this.emailError = "";
+      this.nameError = "";
+      this.passwordError = "";
+    },
     login() {
-      store.dispatch("auth/register", this.info).then(() => {
-        this.$toast
-          .add({
+      store
+        .dispatch("auth/register", this.info)
+        .then(() => {
+          this.$toast.add({
             severity: "success",
             summary: "Account was created successfully.",
 
             life: 3000,
-          })
+          });
           this.$router.push({ name: "login" });
-      });
+        })
+        .catch((err) => {
+          for (const key in err.errors) {
+            this[key + "Error"] = err.errors[key].toString();
+          }
+        });
     },
   },
 };

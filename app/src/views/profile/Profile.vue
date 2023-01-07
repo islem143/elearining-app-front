@@ -1,5 +1,5 @@
 <template>
-  <div class="card p-fluid">
+  <div class="card p-fluid bg-white">
     <h4>Profile</h4>
     <div class="flex justify-content-center">
       <div class="w-6 mt-5">
@@ -41,6 +41,7 @@ export default {
     this.user = store.state.auth.user.data;
     console.log(this.user);
   },
+ 
   setup() {
     return { v$: useVuelidate() };
   },
@@ -85,13 +86,14 @@ export default {
             let formData = new FormData();
             formData.append("image", file);
             await axios
-              .post("/api/user/image" , formData, {
+              .post("/api/users/image" , formData, {
                 headers: {
                   "Content-Type": "multipart/form-data",
                 },
               })
               .then((res) => {
                 store.commit("auth/setUser", res.data);
+                this.user = store.state.auth.user.data;
               });
           }
         });

@@ -22,7 +22,7 @@
           label="Delete Course"
           icon="pi pi-pencil"
           class="p-button-rounded p-button-danger mr-2"
-          @click="deleteCourse"
+          @click="$emit('delete-course', course.id)"
         />
       </div>
     </div>
@@ -101,6 +101,7 @@
 import axios from "../../http";
 import CourseQuiz from "./CourseQuiz.vue";
 import { QuillDeltaToHtmlConverter } from "quill-delta-to-html";
+
 export default {
   name: "CourseCard",
   inject: ["role"],
@@ -211,18 +212,10 @@ export default {
           });
         });
     },
-    deleteCourse() {
-      axios
-        .delete(
-          "/api/module/" +
-            this.$route.params.moduleId +
-            "/course/" +
-            this.course.id
-        )
-        .then((res) => {
-          console.log("yes");
-        });
-    },
+    // deleteCourse() {
+    //    console.log(this.course.id)
+    //   this.$emit("delete-course", this.course.id);
+    // },
     editCourse() {
       this.$router.push({
         name: "course-edit",

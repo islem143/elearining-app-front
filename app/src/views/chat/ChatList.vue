@@ -7,15 +7,14 @@
     <div
       @click="$emit('select-user', user)"
       :class="
-        'card cursor-pointer flex align-items-center hover:bg-blue-400 ' +
+        'card   cursor-pointer flex align-items-center hover:bg-blue-400 ' +
         (selectedUserId == user.id ? 'bg-blue-200' : '')
       "
       v-for="user in users"
       :key="user.id"
     >
       <img
-        width="40"
-        class="mr-2"
+        class="mr-2 max-w-2rem border-round-3xl"
         :src="'http://localhost:8081/images/' + user.profile.img_url"
         alt=""
       />
@@ -25,7 +24,6 @@
 </template>
 
 <script>
-
 export default {
   name: "ChatList",
   data() {

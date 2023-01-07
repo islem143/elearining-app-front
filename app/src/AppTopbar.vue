@@ -25,8 +25,7 @@
       <i class="pi pi-ellipsis-v"></i>
     </button>
     <ul class="layout-topbar-menu hidden lg:flex origin-top">
-
-      <li>
+      <!-- <li>
         <router-link :to="{ name: 'dashboard' }">
           <p class="p-link mt-2 hover:bg-gray-300 p-2">Dashboard</p></router-link>
     
@@ -45,7 +44,7 @@
         <router-link :to="{ name: 'history-list' }">
           <p class="p-link mt-2 hover:bg-gray-300 p-2">History</p></router-link
         >
-      </li>
+      </li> -->
       <li>
         <p @click="logout" class="p-link mt-2 hover:bg-gray-300 p-2">Logout</p>
       </li>
@@ -62,10 +61,13 @@
 				</button>
 			</li> -->
       <li>
+        <Router-link :to="{ name: 'profile' }">
         <button class="p-link layout-topbar-button">
           <i class="pi pi-user"></i>
-          <span>Profile</span>
+        
+            <span>Profile</span>
         </button>
+      </Router-link>
       </li>
     </ul>
   </div>
@@ -74,7 +76,7 @@
 <script>
 import store from "./store";
 export default {
-  inject:['role'],
+  inject: ["role"],
   methods: {
     onMenuToggle(event) {
       this.$emit("menu-toggle", event);

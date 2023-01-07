@@ -23,8 +23,8 @@
               180deg,
               var(--surface-50) 38.9%,
               var(--surface-0)
-            );
-          "
+            );"
+          
         >
           <div class="w-full md:w-10 mx-auto">
             <label for="email1" class="block text-900 text-xl font-medium mb-2"
@@ -38,7 +38,7 @@
               placeholder="Email"
               style="padding: 1rem"
             />
-
+            <p class="p-error">{{ emailError }}</p>
             <label
               for="password1"
               class="block text-900 font-medium text-xl mb-2"
@@ -53,7 +53,7 @@
               inputClass="w-full"
               inputStyle="padding:1rem"
             ></Password>
-
+            <p class="p-error">{{ passwordError }}</p>
             <div class="flex align-items-center justify-content-between mb-5">
               <div class="flex align-items-center">
                 <Checkbox
@@ -85,12 +85,16 @@
 <script>
 import store from "../../store";
 export default {
-  name:'Login',
+  name: "Login",
   data() {
     return {
       email: "",
       password: "",
       checked: false,
+
+      emailError: "",
+      passwordError: "",
+      error: "",
     };
   },
   computed: {
@@ -105,6 +109,12 @@ export default {
         .dispatch("auth/login", { email: this.email, password: this.password })
         .then(() => {
           this.$router.push("/dashboard");
+        })
+        .catch((err) => {
+          console.log(err);
+          for (const key in err.errors) {
+            this[key + "Error"] = err.errors[key].toString();
+          }
         });
     },
   },

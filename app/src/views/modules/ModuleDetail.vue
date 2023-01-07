@@ -22,6 +22,7 @@
       <CouresListVue
         @get-course="getCourse"
         @get-courses="getCourses"
+        @delete-course="deleteCourse"
         :courses="courses"
       />
     </div>
@@ -71,6 +72,21 @@ export default {
     this.getCourses();
   },
   methods: {
+    deleteCourse(id){
+      console.log(id);
+      axios
+        .delete(
+          "/api/module/" +
+            this.$route.params.moduleId +
+            "/course/" +
+           id
+        )
+        .then((res) => {
+          console.log("yes");
+          let index=this.courses.findIndex(val=>val.id==id);
+          this.courses.splice(index,1);
+        });
+    },
     getCourses() {
       axios.get("/api/module/" + this.id + "/course").then((res) => {
         this.courses = res.data;

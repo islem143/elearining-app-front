@@ -62,23 +62,44 @@ export default {
           to: { name: "history-list" },
         },
       ];
-    }else if(this.role=="teacher" || this.role=="student"){
-      this.items=[
+    } else if (this.role == "teacher") {
+      this.items = [
         {
-            id: 1,
-            label: "Modules",
-            roles: ["teacher", "student"],
-            to: { name: "module-list" },
-          },
-          {
-            id: 2,
-            label: "Chat",
-            roles: ["teacher", "student", "super-admin"],
-            to: { name: "chat" },
-          },
-      ]
+          id: 1,
+          label: "Modules",
+          roles: ["teacher", "student"],
+          to: { name: "module-list" },
+        },
+        {
+          id: 2,
+          label: "Chat",
+          roles: ["teacher", "student", "super-admin"],
+          to: { name: "chat" },
+        },
+        {
+          id: 3,
+          label: "History",
+          roles: ["teacher", "super-admin"],
+          to: { name: "history-list" },
+        },
+      ];
+    } else {
+      this.items = [
+        {
+          id: 1,
+          label: "Modules",
+          roles: ["teacher", "student"],
+          to: { name: "module-list" },
+        },
+        {
+          id: 2,
+          label: "Chat",
+          roles: ["teacher", "student", "super-admin"],
+          to: { name: "chat" },
+        },
+       
+      ];
     }
-
   },
 
   props: {
