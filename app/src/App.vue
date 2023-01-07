@@ -13,7 +13,7 @@
       <AppFooter />
     </div>
 
-    <!-- <AppConfig :layoutMode="layoutMode" @layout-change="onLayoutChange" /> -->
+    <AppConfig :layoutMode="layoutMode" @layout-change="onLayoutChange" />
     <transition name="layout-mask">
       <div
         class="layout-mask p-component-overlay"
@@ -26,7 +26,7 @@
 <script>
 import AppTopBar from "./AppTopbar.vue";
 import AppMenu from "./AppMenu.vue";
-//import AppConfig from "./AppConfig.vue";
+import AppConfig from "./AppConfig.vue";
 import AppFooter from "./AppFooter.vue";
 
 export default {
@@ -160,7 +160,7 @@ export default {
   components: {
     AppTopBar: AppTopBar,
     AppMenu: AppMenu,
-  //  AppConfig: AppConfig,
+ AppConfig: AppConfig,
     AppFooter: AppFooter,
   },
 };

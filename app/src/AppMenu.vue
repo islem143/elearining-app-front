@@ -1,18 +1,30 @@
 <template>
   <div class="layout-menu-container">
-    <!-- <AppSubmenu :items="model" class="layout-menu" :root="true" @menuitem-click="onMenuItemClick" @keydown="onKeyDown" /> -->
+    <!-- <AppSubmenu
+      :items="items"
+      class="layout-menu"
+      :root="true"
+      @menuitem-click="onMenuItemClick"
+      @keydown="onKeyDown"
+    /> -->
     <div class="p-2">
-      <h4 class="mb-5">Modules</h4>
-
-      <!-- <div v-for="module in modules">
-        <Router-link
-          :to="{ name: 'module-detail', params: { moduleId: module.id } }"
+      <Router-link
+        :key="item.id"
+        v-for="item in items"
+        :to="item.to"
+        @click="setCurrentItem(item)"
+      >
+        <a
+          v-if="item.roles.includes(role)"
+          :class="
+            'block mb-2  hover:surface-200 p-2 ' +
+            (currentItem == item.id ? 'text-blue-400' : 'text-900')
+          "
+          href="#"
         >
-          <a href="#"> {{ module.title }}</a>
-        </Router-link>
-
-        <hr />
-      </div> -->
+          {{ item.label }}</a
+        >
+      </Router-link>
     </div>
   </div>
 </template>
@@ -21,20 +33,62 @@
 import AppSubmenu from "./AppSubmenu.vue";
 import axios from "./http";
 export default {
+  inject: ["role"],
   data() {
     return {
-      modules: [],
+      items: [],
+      currentItem: null,
     };
   },
+  created() {
+    if (this.role == "super-admin") {
+      this.items = [
+        {
+          id: 1,
+          label: "Dashbarod",
+          roles: ["super-admin"],
+          to: { name: "admin-dashboard" },
+        },
+        {
+          id: 2,
+          label: "Users",
+          roles: ["super-admin"],
+          to: { name: "users-list" },
+        },
+        {
+          id: 3,
+          label: "History",
+          roles: ["teacher", "super-admin"],
+          to: { name: "history-list" },
+        },
+      ];
+    }else if(this.role=="teacher" || this.role=="student"){
+      this.items=[
+        {
+            id: 1,
+            label: "Modules",
+            roles: ["teacher", "student"],
+            to: { name: "module-list" },
+          },
+          {
+            id: 2,
+            label: "Chat",
+            roles: ["teacher", "student", "super-admin"],
+            to: { name: "chat" },
+          },
+      ]
+    }
+
+  },
+
   props: {
     model: Array,
   },
-  async created() {
-    // await axios.get("/api/module").then((res) => {
-    //   this.modules = res.data;
-    // });
-  },
+
   methods: {
+    setCurrentItem(item) {
+      this.currentItem = item.id;
+    },
     moduleDetail(module) {
       this.$router.push({
         name: "module-detail",

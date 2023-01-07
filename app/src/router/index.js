@@ -203,6 +203,29 @@ const asyncRoutes = [
       },
     ],
   },
+  {
+    path: "/admin",
+    component: App,
+
+    children: [
+      {
+        path: "users",
+        name: "users-list",
+        component: () => import("../views/admin/UsersList.vue"),
+        meta: {
+          roles: ["super-admin"],
+        },
+      },
+      {
+        path: "",
+        name: "admin-dashboard",
+        component: () => import("../views/admin/Dashboard.vue"),
+        meta: {
+          roles: ["super-admin"],
+        },
+      },
+    ],
+  },
 
   { path: "/:pathMatch(.*)", redirect: "/404", hidden: true },
 ];

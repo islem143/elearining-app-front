@@ -71,7 +71,7 @@ export default {
     async submit() {
       const isFormCorrect = await this.v$.$validate();
       if (isFormCorrect) {
-        await axios.put("/api/user/", this.user).then(async (res) => {
+        await axios.put("/api/users/"+this.user.id, this.user).then(async (res) => {
           let file = this.$refs.image.files[0];
           this.$toast.add({
             severity: "success",

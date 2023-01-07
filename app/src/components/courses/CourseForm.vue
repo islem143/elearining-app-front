@@ -6,7 +6,7 @@
       <div class="w-6 mt-5">
         <div class="field">
           <label for="name1">Title</label>
-          <InputText v-model="info.title" type="text" />
+          <InputText v-model="info.title" type="text"  />
         </div>
         <div class="field">
           <label for="Description">Description</label>
