@@ -62,6 +62,15 @@ const asyncRoutes = [
         },
       },
       {
+        path: "mylist",
+        name: "module-student-list",
+        component: () => import("../views/modules/MyModules.vue"),
+        meta: {
+          roles: ["student"],
+        },
+      },
+
+      {
         path: ":moduleId(\\d+)/detail",
         name: "module-detail",
         component: () => import("../views/modules/ModuleDetail.vue"),

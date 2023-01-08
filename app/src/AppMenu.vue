@@ -92,12 +92,17 @@ export default {
           to: { name: "module-list" },
         },
         {
+          id: 1,
+          label: "My Modules",
+          roles: ["student"],
+          to: { name: "module-student-list" },
+        },
+        {
           id: 2,
           label: "Chat",
           roles: ["teacher", "student", "super-admin"],
           to: { name: "chat" },
         },
-       
       ];
     }
   },

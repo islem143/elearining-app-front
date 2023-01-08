@@ -37,7 +37,21 @@
       >
     </template>
     <template #footer>
-      <Button @click="$emit('go-to', module)" :label="role=='student'?'Get Started':'Edit Courses'" />
+      <Button
+        v-if="mylist ||   (module.users && module.users[0])"
+        @click="$emit('go-to', module)"
+        label="Continue"
+      />
+      <Button
+        v-else-if="role == 'student'"
+        @click="$emit('enroll', module)"
+        label="Enroll"
+      />
+      <Button
+        v-else
+        @click="$emit('go-to', module)"
+        label="Edit Courses"
+      />
     </template>
   </Card>
 </template>
@@ -46,6 +60,6 @@
 export default {
   name: "ModuleCard",
   inject: ["role"],
-  props: ["module"],
+  props: ["module", "mylist"],
 };
 </script>
