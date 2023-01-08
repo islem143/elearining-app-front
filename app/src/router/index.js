@@ -213,6 +213,22 @@ const asyncRoutes = [
     ],
   },
   {
+    path: "/teacher",
+    component: App,
+
+    children: [
+     
+      {
+        path: "",
+        name: "teacher-dashboard",
+        component: () => import("../views/TeacherDashboard.vue"),
+        meta: {
+          roles: ["teacher"],
+        },
+      },
+    ],
+  },
+  {
     path: "/admin",
     component: App,
 

@@ -1,7 +1,7 @@
 <template>
   <div class="col-12">
     <div class="card">
-      <h3>Modules</h3>
+      <h3>My Modules</h3>
       <div class="flex align-items-center">
         <div class="p-input-icon-right col-4">
           <i class="pi pi-search" />
@@ -58,10 +58,14 @@ export default {
   },
 
   methods: {
+    list(e) {
+      this.page = e.page;
+      this.getModules();
+    },
     getModules() {
-      let params = { title: this.search,page:this.page };
+      let params = { title: this.search,page:this.page+1 };
       axios.get("/api/module/myModules", { params }).then((res) => {
-        this.data = res.data;
+        this.data = res.data.data;
 
         this.data.forEach((d) => {
           axios.get("/api/module/" + d.id + "/completedCourses").then((res) => {

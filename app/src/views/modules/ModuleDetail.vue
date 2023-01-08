@@ -1,5 +1,5 @@
 <template>
-  <div class="card pt-0 px-0 p-fluid bg-white">
+  <div class="card pt-0 px-0 p-fluid bg-white w-10 mx-auto">
     <div class="p-4 text-white border-round-top m-0 bg-blue-300">
       <h3>Module: {{ info.title }}</h3>
     </div>

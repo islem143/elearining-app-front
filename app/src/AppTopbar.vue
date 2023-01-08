@@ -25,49 +25,26 @@
       <i class="pi pi-ellipsis-v"></i>
     </button>
     <ul class="layout-topbar-menu hidden lg:flex origin-top">
-      <!-- <li>
-        <router-link :to="{ name: 'dashboard' }">
-          <p class="p-link mt-2 hover:bg-gray-300 p-2">Dashboard</p></router-link>
-    
-      </li>
-      <li>
-        <router-link :to="{ name: 'module-list' }">
-          <p class="p-link mt-2 hover:bg-gray-300 p-2">Modules</p></router-link
+      <li v-for="item in items" :key="item.id">
+        <router-link :to="item.to">
+          <p class="p-link mt-2 hover:bg-gray-300 p-2">
+            {{ item.label }}
+          </p></router-link
         >
       </li>
-      <li>
-        <router-link :to="{ name: 'chat' }">
-          <p class="p-link mt-2 hover:bg-gray-300 p-2">Chat</p></router-link
-        >
-      </li>
-      <li v-if="role=='teacher'">
-        <router-link :to="{ name: 'history-list' }">
-          <p class="p-link mt-2 hover:bg-gray-300 p-2">History</p></router-link
-        >
-      </li> -->
+
       <li>
         <p @click="logout" class="p-link mt-2 hover:bg-gray-300 p-2">Logout</p>
       </li>
-      <!-- <li>
-				<button class="p-link layout-topbar-button">
-					<i class="pi pi-calendar"></i>
-					<span>Events</span>
-				</button>
-			</li>
-			<li>
-				<button class="p-link layout-topbar-button">
-					<i class="pi pi-cog"></i>
-					<span>Settings</span>
-				</button>
-			</li> -->
+
       <li>
         <Router-link :to="{ name: 'profile' }">
-        <button class="p-link layout-topbar-button">
-          <i class="pi pi-user"></i>
-        
+          <button class="p-link layout-topbar-button">
+            <i class="pi pi-user"></i>
+
             <span>Profile</span>
-        </button>
-      </Router-link>
+          </button>
+        </Router-link>
       </li>
     </ul>
   </div>
@@ -77,6 +54,12 @@
 import store from "./store";
 export default {
   inject: ["role"],
+  data(){
+    return {
+   items:[],
+  }
+
+  },
   methods: {
     onMenuToggle(event) {
       this.$emit("menu-toggle", event);
@@ -94,6 +77,72 @@ export default {
         this.$router.replace({ name: "login" });
       });
     },
+  },
+  created(){
+    if (this.role == "super-admin") {
+      this.items = [
+        {
+          id: 1,
+          label: "Dashbarod",
+          roles: ["super-admin"],
+          to: { name: "admin-dashboard" },
+        },
+        {
+          id: 2,
+          label: "Users",
+          roles: ["super-admin"],
+          to: { name: "users-list" },
+        },
+        {
+          id: 3,
+          label: "History",
+          roles: ["teacher", "super-admin"],
+          to: { name: "history-list" },
+        },
+      ];
+    } else if (this.role == "teacher") {
+      this.items = [
+        {
+          id: 1,
+          label: "Modules",
+          roles: ["teacher", "student"],
+          to: { name: "module-list" },
+        },
+        {
+          id: 2,
+          label: "Chat",
+          roles: ["teacher", "student", "super-admin"],
+          to: { name: "chat" },
+        },
+        {
+          id: 3,
+          label: "History",
+          roles: ["teacher", "super-admin"],
+          to: { name: "history-list" },
+        },
+      ];
+    } else {
+      this.items = [
+        {
+          id: 1,
+          label: "Modules",
+          roles: ["teacher", "student"],
+          to: { name: "module-list" },
+        },
+        {
+          id: 2,
+          label: "My Modules",
+          roles: ["student"],
+          to: { name: "module-student-list" },
+        },
+        {
+          id: 3,
+          label: "Chat",
+          roles: ["teacher", "student", "super-admin"],
+          to: { name: "chat" },
+        },
+      ];
+    }
   },
   computed: {
     darkTheme() {

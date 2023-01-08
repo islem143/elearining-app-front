@@ -41,70 +41,7 @@ export default {
     };
   },
   created() {
-    if (this.role == "super-admin") {
-      this.items = [
-        {
-          id: 1,
-          label: "Dashbarod",
-          roles: ["super-admin"],
-          to: { name: "admin-dashboard" },
-        },
-        {
-          id: 2,
-          label: "Users",
-          roles: ["super-admin"],
-          to: { name: "users-list" },
-        },
-        {
-          id: 3,
-          label: "History",
-          roles: ["teacher", "super-admin"],
-          to: { name: "history-list" },
-        },
-      ];
-    } else if (this.role == "teacher") {
-      this.items = [
-        {
-          id: 1,
-          label: "Modules",
-          roles: ["teacher", "student"],
-          to: { name: "module-list" },
-        },
-        {
-          id: 2,
-          label: "Chat",
-          roles: ["teacher", "student", "super-admin"],
-          to: { name: "chat" },
-        },
-        {
-          id: 3,
-          label: "History",
-          roles: ["teacher", "super-admin"],
-          to: { name: "history-list" },
-        },
-      ];
-    } else {
-      this.items = [
-        {
-          id: 1,
-          label: "Modules",
-          roles: ["teacher", "student"],
-          to: { name: "module-list" },
-        },
-        {
-          id: 1,
-          label: "My Modules",
-          roles: ["student"],
-          to: { name: "module-student-list" },
-        },
-        {
-          id: 2,
-          label: "Chat",
-          roles: ["teacher", "student", "super-admin"],
-          to: { name: "chat" },
-        },
-      ];
-    }
+    
   },
 
   props: {
