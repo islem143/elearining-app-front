@@ -144,7 +144,13 @@
           @input="!editMode && v$.user.email.$touch()"
           @blur="!editMode && v$.user.email.$touch()"
         />
-        <p class="p-error" v-for="err in errorMessages('email')">{{ err }}</p>
+        <p
+          class="p-error"
+          v-if="!editMode"
+          v-for="err in errorMessages('email')"
+        >
+          {{ err }}
+        </p>
         <label for="password1" class="block text-900 font-medium text-xl mb-2"
           >Role</label
         >
@@ -168,8 +174,8 @@
           class="w-full mb-3"
           inputClass="w-full"
           inputStyle="padding:1rem"
-          @input="!editMode && v$.user.password.$touch()"
-          @blur="!editMode && v$.user.password.$touch()"
+          @input="v$.user.password.$touch()"
+          @blur="v$.user.password.$touch()"
         ></Password>
         <p class="p-error" v-for="err in errorMessages('password')">
           {{ err }}
@@ -186,8 +192,8 @@
           class="w-full mb-3"
           inputClass="w-full"
           inputStyle="padding:1rem"
-          @input="!editMode && v$.user.password_confirmation.$touch()"
-          @blur="!editMode && v$.user.password_confirmation.$touch()"
+          @input="v$.user.password_confirmation.$touch()"
+          @blur="v$.user.password_confirmation.$touch()"
         ></Password>
         <p
           class="p-error"
@@ -329,18 +335,22 @@ export default {
           name: { required },
 
           password: {
-            minLength: this.user.password && minLength(5),
-            checkPasswodrd: helpers.withMessage(
-              "No Matching Passwordrs",
-              (val) => val && val === this.user.password_confirmation
-            ),
+            minLength: !this.user.password ? {} : minLength(5),
+            checkPasswodrd: !this.user.password
+              ? {}
+              : helpers.withMessage(
+                  "No Matching Passwordrs",
+                  (val) => val && val === this.user.password_confirmation
+                ),
           },
           password_confirmation: {
-            minLength: this.user.password_confirmation && minLength(5),
-            checkPasswodrd: helpers.withMessage(
-              "No Matching Passwordrs",
-              (val) => val && val === this.user.password
-            ),
+            minLength: !this.user.password_confirmation ? {} : minLength(5),
+            checkPasswodrd: !this.user.password
+              ? {}
+              : helpers.withMessage(
+                  "No Matching Passwordrs",
+                  (val) => val && val === this.user.password
+                ),
           },
         },
       };
@@ -396,7 +406,6 @@ export default {
       this.submitted = true;
       const isFormCorrect = await this.v$.$validate();
       if (!isFormCorrect) {
-        this.userDialog = false;
         return;
       }
       if (this.editMode) {

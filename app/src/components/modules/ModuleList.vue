@@ -122,6 +122,7 @@ export default {
     getModules() {
       let params = { title: this.search, page: this.page + 1 };
       axios.get("/api/module", { params }).then((res) => {
+          console.log(res.status);
         this.data = res.data.data;
         if (this.role == "student") {
           this.data.forEach((d) => {
@@ -133,6 +134,8 @@ export default {
               });
           });
         }
+      }).catch(err=>{
+        console.log(err.message);
       });
     },
     src(info) {

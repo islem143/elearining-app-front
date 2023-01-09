@@ -1,6 +1,5 @@
 import axios from "axios";
 
-import emitter from "./mitt";
 let client = axios.create({
   baseURL: "http://localhost:8081",
   headers: {
@@ -17,13 +16,5 @@ client.interceptors.request.use((config) => {
   return config;
 });
 
-client.interceptors.response.use(
-  (res) => {return res},
-  (err) => {
-    if (err.response.status == 403) {
-      emitter.emit("error", { message: err.message });
-    }
-    return Promise.reject(err);
-  }
-);
+
 export default client;

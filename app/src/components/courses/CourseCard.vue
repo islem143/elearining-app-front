@@ -85,14 +85,15 @@
   </div>
 
   <CourseQuiz
-    v-if="
-      (role == 'teacher' && course.quiz) ||
-      (role != 'teacher' && course.is_taken == true && course.quiz)
-    "
+     
+    v-if="(role == 'teacher' && course.quizzes[0]) || 
+    (role != 'teacher' && course.is_taken == true && course.quizzes)"
+     
+    
     @go-to-quiz="goToQuiz"
     @edit-quiz="editQuiz"
     @delete-quiz="deleteQuiz"
-    :quiz="course.quiz"
+    :quiz="course.quizzes[0]"
     :course="course"
   />
 </template>
@@ -145,6 +146,7 @@ export default {
       });
     },
     editQuiz(quiz) {
+      console.log(quiz);
       this.$router.push({
         name: "quiz-edit",
         params: {

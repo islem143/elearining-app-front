@@ -33,7 +33,7 @@
 import ModuleInfoVue from "../../components/modules/ModuleInfo.vue";
 import CouresListVue from "../../components/courses/CouresList.vue";
 import axios from "../../http";
-
+import Course from "../../api/Course";
 export default {
   inject: ["role"],
   name: "ModuleDetail",
@@ -72,25 +72,19 @@ export default {
     this.getCourses();
   },
   methods: {
-    deleteCourse(id){
+    deleteCourse(id) {
       console.log(id);
       axios
-        .delete(
-          "/api/module/" +
-            this.$route.params.moduleId +
-            "/course/" +
-           id
-        )
+        .delete("/api/module/" + this.$route.params.moduleId + "/course/" + id)
         .then((res) => {
           console.log("yes");
-          let index=this.courses.findIndex(val=>val.id==id);
-          this.courses.splice(index,1);
+          let index = this.courses.findIndex((val) => val.id == id);
+          this.courses.splice(index, 1);
         });
     },
-    getCourses() {
-      axios.get("/api/module/" + this.id + "/course").then((res) => {
-        this.courses = res.data;
-      });
+    async getCourses() {
+      let courses = await Course.getCourses(this.id);
+      this.courses = courses;
     },
     getCourse(course) {
       axios
